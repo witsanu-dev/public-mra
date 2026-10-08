@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { alertInput, alertSuccess } from '@/lib/mra-alert';
-import { APP_VERSION, APP_YEAR, apiUrl, assetUrl } from '@/lib/constants';
+import { APP_VERSION, APP_YEAR, apiUrl, assetUrl, BASE_PATH } from '@/lib/constants';
 import { HisStatusBadge } from '@/components/ui/HisStatusBadge';
 import { DatabaseConnectionModal } from '@/components/settings/DatabaseConnectionModal';
 

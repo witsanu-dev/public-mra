@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="th" suppressHydrationWarning>
       <body className={`${anuphan.className} min-h-screen bg-slate-50 text-slate-800 antialiased`} suppressHydrationWarning>
         <LayoutShell>{children}</LayoutShell>
       </body>
