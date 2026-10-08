@@ -90,8 +90,9 @@ export async function proxy(req: NextRequest) {
     // If already authenticated with a valid session, redirect away to application
     if (user) {
       const callbackParam = req.nextUrl.searchParams.get('callbackUrl');
-      const targetUrl = sanitizeCallbackUrl(callbackParam);
-      return NextResponse.redirect(new URL(targetUrl, req.url));
+      const targetPath = sanitizeCallbackUrl(callbackParam);
+      const targetUrl = new URL(req.nextUrl.basePath ? `${req.nextUrl.basePath}${targetPath}` : targetPath, req.url);
+      return NextResponse.redirect(targetUrl);
     }
     // Otherwise allow access to login page
     return applySecurityHeaders(NextResponse.next());

@@ -242,7 +242,7 @@ export async function POST(req: NextRequest) {
       name: SESSION_COOKIE_NAME,
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false, // Must be false for hospital internal HTTP intranet (10.250.101.18)
       sameSite: 'lax',
       path: '/',
       maxAge: SESSION_MAX_AGE_SEC,
