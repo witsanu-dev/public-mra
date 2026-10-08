@@ -9,9 +9,20 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "@types/qrcode": "^1.5.6",
+    "exceljs": "^4.4.0",
+    "lucide-react": "^1.50.0",
+    "mysql2": "^3.24.5",
     "next": "16.3.8",
+    "otplib": "^13.5.0",
+    "qrcode": "^1.5.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.89.0",
+    "sweetalert2": "^11.26.25",
+    "zod": "^3.25.76",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -1,0 +1,420 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   SweetAlert2 — MRA Branded Theme
+   Design System:
+   - Border Radius: rounded-sm (0.25rem) consistent across modal, toast & buttons
+   - Spacing: Standard component margin/padding (Icon -> Title -> Text -> Actions)
+   - Toast (Bottom-End): Grid layout (Icon | Text stacked | Close), ample margins, no text wrap glitches
+   - Actions: Buttons never stick together (clear gap-3 / 12px)
+   - No redundant buttons: Only Confirm & Cancel (Deny/No button strictly hidden)
+   - Colors: Navy (#0f172a), Slate (#475569, #e2e8f0), Rose (#e11d48 for danger)
+   - Font: Inherits system Anuphan font
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. MODAL BACKDROP OVERLAY ── */
+.swal2-container:not(.swal2-top-end):not(.swal2-bottom-end):not(.swal2-toast-shown) {
+  z-index: 99999 !important;
+  font-family: inherit !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+  padding: 1rem !important;
+}
+
+/* ── 2. TOAST CONTAINER (BOTTOM-RIGHT / TOP-RIGHT) ── */
+.swal2-container.swal2-bottom-end,
+.swal2-container.swal2-top-end,
+.swal2-container.swal2-toast-shown {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  z-index: 99999 !important;
+  font-family: inherit !important;
+  padding: 1.25rem !important;
+  pointer-events: none !important;
+}
+
+/* ── 3. STANDARD MODAL BOX (Popup) ── */
+.swal2-popup:not(.swal2-toast) {
+  border-radius: 0.25rem !important; /* rounded-sm standard */
+  padding: 1.75rem 1.5rem 1.5rem !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1) !important;
+  width: 100% !important;
+  max-width: 420px !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+}
+
+/* Modal Icon */
+.swal2-popup:not(.swal2-toast) .swal2-icon {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  margin: 0.25rem auto 1rem auto !important;
+  border-width: 2.5px !important;
+  box-sizing: border-box !important;
+}
+
+.swal2-popup:not(.swal2-toast) .swal2-icon.swal2-warning {
+  border-color: #f59e0b !important;
+  color: #d97706 !important;
+}
+
+.swal2-popup:not(.swal2-toast) .swal2-icon.swal2-error {
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
+}
+
+.swal2-popup:not(.swal2-toast) .swal2-icon.swal2-success {
+  border-color: #10b981 !important;
+  color: #059669 !important;
+}
+
+.swal2-popup:not(.swal2-toast) .swal2-icon.swal2-info {
+  border-color: #3b82f6 !important;
+  color: #2563eb !important;
+}
+
+.swal2-popup:not(.swal2-toast) .swal2-icon.swal2-question {
+  border-color: #6366f1 !important;
+  color: #4f46e5 !important;
+}
+
+.swal2-popup:not(.swal2-toast) .swal2-icon .swal2-icon-content {
+  font-size: 2rem !important;
+  line-height: 3.25rem !important;
+  font-weight: 600 !important;
+}
+
+/* Modal Title */
+.swal2-popup:not(.swal2-toast) .swal2-title {
+  font-size: 1.125rem !important; /* 18px */
+  font-weight: 700 !important;
+  color: #0f172a !important; /* slate-900 */
+  margin: 0 0 0.5rem 0 !important;
+  padding: 0 !important;
+  line-height: 1.5 !important;
+  text-align: center !important;
+}
+
+/* Modal Body / Description */
+.swal2-popup:not(.swal2-toast) .swal2-html-container {
+  font-size: 0.875rem !important; /* 14px */
+  color: #64748b !important; /* slate-500 */
+  line-height: 1.6 !important;
+  margin: 0.25rem 0 0 0 !important;
+  padding: 0 0.5rem !important;
+  text-align: center !important;
+}
+
+/* Modal Actions (Buttons) */
+.swal2-popup:not(.swal2-toast) .swal2-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 0.75rem !important; /* 12px gap between buttons */
+  width: 100% !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+}
+
+.swal2-popup:not(.swal2-toast) .swal2-actions button {
+  margin: 0 !important;
+}
+
+/* ── 4. TOAST CARD (BOTTOM-RIGHT ALERT) ── */
+/* Modern Grid: Col 1 = Icon | Col 2 = Title + Text stacked vertically | Col 3 = Close */
+.swal2-popup.swal2-toast {
+  display: grid !important;
+  grid-template-columns: auto 1fr auto !important;
+  grid-template-rows: auto auto !important;
+  column-gap: 0.875rem !important; /* 14px clear space between icon and text */
+  row-gap: 0.25rem !important;     /* 4px clean gap between title and text */
+  align-items: center !important;
+  min-width: 340px !important;
+  max-width: 460px !important;
+  width: auto !important;
+  padding: 1rem 1.25rem !important;
+  border-radius: 0.25rem !important; /* rounded-sm standard */
+  border: 1px solid #e2e8f0 !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 4px 6px -4px rgba(15, 23, 42, 0.05) !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+/* Toast Icon */
+.swal2-popup.swal2-toast .swal2-icon {
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  align-self: center !important;
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  min-width: 2.25rem !important;
+  min-height: 2.25rem !important;
+  margin: 0 !important;
+  border-width: 2px !important;
+  flex-shrink: 0 !important;
+}
+
+.swal2-popup.swal2-toast .swal2-icon.swal2-success {
+  border-color: #10b981 !important;
+  color: #059669 !important;
+}
+
+.swal2-popup.swal2-toast .swal2-icon.swal2-error {
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
+}
+
+.swal2-popup.swal2-toast .swal2-icon.swal2-warning {
+  border-color: #f59e0b !important;
+  color: #d97706 !important;
+}
+
+.swal2-popup.swal2-toast .swal2-icon.swal2-info {
+  border-color: #3b82f6 !important;
+  color: #2563eb !important;
+}
+
+.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content {
+  font-size: 1.25rem !important;
+  line-height: 2.25rem !important;
+  font-weight: 700 !important;
+}
+
+/* Toast Title (Top row of text column) */
+.swal2-popup.swal2-toast .swal2-title {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  font-size: 0.9375rem !important; /* 15px */
+  font-weight: 600 !important;
+  color: #0f172a !important; /* Slate-900 */
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+/* Toast Body / Text (Bottom row of text column) */
+.swal2-popup.swal2-toast .swal2-html-container {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  font-size: 0.8125rem !important; /* 13px */
+  color: #64748b !important; /* Slate-500 */
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+.swal2-popup.swal2-toast .mra-swal-text {
+  font-size: 0.8125rem !important;
+  color: #64748b !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.swal2-popup.swal2-toast .swal2-html-container:empty {
+  display: none !important;
+}
+
+/* Toast Close Button (Col 3, Top) */
+.swal2-popup.swal2-toast .swal2-close {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+  margin: -0.25rem -0.25rem 0 0.5rem !important;
+  padding: 0.25rem !important;
+  font-size: 1.125rem !important;
+  color: #94a3b8 !important;
+  line-height: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: color 0.15s ease !important;
+}
+
+.swal2-popup.swal2-toast .swal2-close:hover {
+  color: #0f172a !important;
+}
+
+/* Toast Timer Progress Bar */
+.swal2-popup.swal2-toast .swal2-timer-progress-bar-container {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 3px !important;
+  background: #f1f5f9 !important;
+  overflow: hidden !important;
+}
+
+.swal2-popup.swal2-toast .swal2-timer-progress-bar {
+  height: 100% !important;
+  background: #10b981 !important; /* Emerald */
+}
+
+/* ── 5. STRICTLY HIDE DENY / "No" BUTTON (Redundant) ── */
+.swal2-deny,
+.mra-swal-btn-deny,
+button.swal2-deny,
+.swal2-actions .swal2-deny,
+button[style*="display: none"],
+.swal2-actions button[style*="display: none"] {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* ── 6. BUTTONS STANDARDIZED (rounded-sm, professional padding, hover states) ── */
+.swal2-confirm,
+.swal2-cancel,
+.mra-swal-btn-confirm,
+.mra-swal-btn-cancel,
+.mra-swal-btn-danger {
+  font-family: inherit !important;
+  font-size: 0.875rem !important; /* 14px */
+  font-weight: 600 !important;
+  min-height: 2.375rem !important; /* 38px */
+  min-width: 5.5rem !important; /* 88px */
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 0.25rem !important; /* rounded-sm standard */
+  cursor: pointer !important;
+  transition: all 0.15s ease-in-out !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  outline: none !important;
+}
+
+/* Default Confirm Button (Navy / Dark Primary) */
+.swal2-confirm,
+.mra-swal-btn-confirm {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border: 1px solid #0f172a !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.swal2-confirm:hover,
+.mra-swal-btn-confirm:hover {
+  background: #1e293b !important;
+  border-color: #1e293b !important;
+}
+
+.swal2-confirm:focus-visible,
+.mra-swal-btn-confirm:focus-visible {
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.2) !important;
+}
+
+/* Danger Confirm Button (Rose / Red) */
+.mra-swal-btn-danger,
+.swal2-confirm.mra-swal-btn-danger {
+  background: #e11d48 !important; /* rose-600 */
+  color: #ffffff !important;
+  border: 1px solid #e11d48 !important;
+  box-shadow: 0 1px 2px 0 rgba(225, 29, 72, 0.2) !important;
+}
+
+.mra-swal-btn-danger:hover,
+.swal2-confirm.mra-swal-btn-danger:hover {
+  background: #be123c !important; /* rose-700 */
+  border-color: #be123c !important;
+}
+
+.mra-swal-btn-danger:focus-visible,
+.swal2-confirm.mra-swal-btn-danger:focus-visible {
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.25) !important;
+}
+
+/* Cancel Button (Light Slate Outline) */
+.swal2-cancel,
+.mra-swal-btn-cancel {
+  background: #ffffff !important;
+  color: #475569 !important; /* slate-600 */
+  border: 1px solid #cbd5e1 !important; /* slate-300 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.swal2-cancel:hover,
+.mra-swal-btn-cancel:hover {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+.swal2-cancel:focus-visible,
+.mra-swal-btn-cancel:focus-visible {
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.2) !important;
+}
+
+/* ── 7. INPUT FIELDS INSIDE SWEETALERT ── */
+.swal2-input,
+.mra-swal-input {
+  width: 100% !important;
+  margin: 1rem 0 0 0 !important;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.375rem !important; /* rounded-sm */
+  border: 1px solid #cbd5e1 !important;
+  box-sizing: border-box !important;
+  color: #0f172a !important;
+  outline: none !important;
+  transition: border-color 0.15s, box-shadow 0.15s !important;
+}
+
+.swal2-input:focus,
+.mra-swal-input:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* ── 8. MICRO-ANIMATIONS ── */
+.swal2-show,
+.mra-swal-show {
+  animation: mraModalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+.swal2-hide,
+.mra-swal-hide {
+  animation: mraModalOut 0.12s ease-in forwards !important;
+}
+
+@keyframes mraModalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes mraModalOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}

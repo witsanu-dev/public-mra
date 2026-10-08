@@ -1,26 +1,427 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   MRA Design System — Global Foundation
+   Responsive Web Design Standards
+   ───────────────────────────────────────────── */
+
+/* 1. CSS Custom Properties (Design Tokens)
+   Breakpoints mirror Tailwind defaults:
+   sm: 640px | md: 768px | lg: 1024px | xl: 1280px | 2xl: 1536px
+   ─────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Color palette */
+  --color-primary:      #1e3a5f;   /* blue-950  */
+  --color-primary-mid:  #1e40af;   /* blue-800  */
+  --color-accent:       #db2777;   /* pink-600  */
+  --color-accent-light: #fdf2f8;   /* pink-50   */
+  --color-success:      #059669;   /* emerald-600 */
+  --color-warning:      #d97706;   /* amber-600   */
+  --color-surface:      #ffffff;
+  --color-bg:           #f8fafc;   /* slate-50  */
+  --color-border:       #e2e8f0;   /* slate-200 */
+  --color-text:         #0f172a;   /* slate-900 */
+  --color-text-muted:   #64748b;   /* slate-500 */
+
+  /* Spacing scale */
+  --space-page-x:   1rem;       /* horizontal page padding — mobile  */
+  --space-page-y:   1rem;       /* vertical   page padding — mobile  */
+
+  /* Sidebar */
+  --sidebar-width: 16rem;       /* 256px — desktop */
+
+  /* Topbar */
+  --topbar-height: 4rem;        /* 64px */
+
+  /* Touch targets (WCAG 2.5.5) */
+  --touch-min: 44px;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;         /* 4px standard rounded-sm */
+  --radius-md: 0.375rem;        /* 6px  */
+
+  /* Transitions */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-drawer: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-index layers */
+  --z-base:     0;
+  --z-sticky:   10;
+  --z-overlay:  40;
+  --z-drawer:   50;
+  --z-topbar:   30;
+  --z-modal:    60;
+  --z-toast:    70;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* Fluid page padding for md+ */
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --space-page-x: 1.5rem;
+    --space-page-y: 1.5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 2. Base Reset & Defaults
+   ─────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Prevent layout shift from scrollbar appearance */
+    scrollbar-gutter: stable;
+    /* Improve text rendering */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent horizontal overflow at root level */
+    overflow-x: hidden;
+  }
+
+  /* Body scroll lock — applied by JS when mobile drawer is open */
+  body.drawer-open {
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  /* Form elements inherit font */
+  input,
+  button,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  /* Ensure focusable elements have visible focus rings */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Remove default focus ring (replaced by :focus-visible) */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Smooth scrolling for same-page navigation */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Touch action on interactive elements for mobile */
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Images are responsive by default */
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+  }
 }
+
+/* 3. Responsive Layout Utilities
+   ─────────────────────────────────────────── */
+@layer components {
+  /* Page wrapper — full bleed on mobile, centered with max-width on desktop */
+  .page-container {
+    width: 100%;
+    max-width: 1700px;
+    margin-inline: auto;
+    padding-inline: var(--space-page-x);
+    padding-block: var(--space-page-y);
+  }
+
+  /* Responsive section spacing */
+  .section-gap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-gap {
+      gap: 1.5rem;
+    }
+  }
+
+  /* Card base — responsive padding */
+  .card-responsive {
+    padding: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .card-responsive {
+      padding: 1.25rem;
+    }
+  }
+
+  /* ── Responsive Table Wrapper & text-nowrap ──
+     Ensures medical tables scroll smoothly without wrapping critical clinical text. */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .text-nowrap {
+    white-space: nowrap !important;
+  }
+
+  .w-100 {
+    width: 100% !important;
+  }
+
+  /* Compact button utility (btn-xs) */
+  .btn-xs {
+    height: 1.625rem !important; /* 26px */
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    font-size: 0.6875rem !important; /* 11px */
+    line-height: 1rem !important;
+    border-radius: 0.25rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.25rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Sticky first column inside .table-responsive */
+  .table-responsive .sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: var(--z-sticky);
+  }
+
+  /* ── Sidebar Overlay ──
+     Backdrop rendered behind the mobile drawer.               */
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.5);  /* slate-900/50 */
+    z-index: var(--z-overlay);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    animation: fadeIn var(--transition-normal) both;
+  }
+
+  /* ── Mobile Drawer ── */
+  .sidebar-drawer {
+    position: fixed;
+    inset-block: 0;
+    left: 0;
+    z-index: var(--z-drawer);
+    width: min(var(--sidebar-width) + 2rem, 85vw);  /* max 85% of viewport */
+    transform: translateX(-100%);
+    transition: transform var(--transition-drawer);
+    will-change: transform;
+  }
+
+  .sidebar-drawer.is-open {
+    transform: translateX(0);
+  }
+
+  /* ── Responsive Grid System ──
+     Semantic grid helpers used across cards / form fields.    */
+  .grid-form-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .grid-form-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .grid-form-3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .grid-form-3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-form-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .grid-form-4 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .grid-form-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-form-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* ── Summary Grid (3 cards at bottom of audit page) ── */
+  .grid-summary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .grid-summary {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-summary {
+      grid-template-columns: 4fr 5fr 3fr;
+    }
+  }
+}
+
+/* 4. Animations
+   ─────────────────────────────────────────── */
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slideInLeft {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+
+  /* Respects reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* 5. Print Styles
+   ─────────────────────────────────────────── */
+@media print {
+  /* Hide navigation chrome */
+  .no-print,
+  nav,
+  aside,
+  header .actions,
+  button:not(.print-visible) {
+    display: none !important;
+  }
+
+  /* Reset page background */
+  html,
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Ensure table fits on paper */
+  .table-responsive {
+    overflow: visible !important;
+    background: none !important;
+  }
+
+  /* Avoid page breaks inside table rows */
+  tr {
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  /* Full-width layout */
+  .page-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Diamond Badge Point Sparkle (Scintillation)
+   Smooth diamond twinkling without any wave bands.
+   ───────────────────────────────────────────── */
+@keyframes diamondSparkle {
+  0%, 55%, 100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  68% {
+    opacity: 0.92;
+    transform: scale(1.12);
+  }
+  78% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  88% {
+    opacity: 0.18;
+    transform: scale(0.9);
+  }
+  95% {
+    opacity: 0.04;
+    transform: scale(0.75);
+  }
+}
+
+.animate-diamond-sparkle {
+  animation: diamondSparkle 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+
