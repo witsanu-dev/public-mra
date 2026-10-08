@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { alertInput, alertSuccess } from '@/lib/mra-alert';
-import { APP_VERSION, APP_YEAR, apiUrl, assetUrl, BASE_PATH, DEVELOPER_NAME, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION } from '@/lib/constants';
+import { APP_VERSION, APP_YEAR, apiUrl, assetUrl, BASE_PATH, DEVELOPER_NAME, DEVELOPER_ALIAS, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION } from '@/lib/constants';
 import { HisStatusBadge } from '@/components/ui/HisStatusBadge';
 import { DatabaseConnectionModal } from '@/components/settings/DatabaseConnectionModal';
 import { EulaModal } from '@/components/mra/EulaModal';
@@ -544,10 +544,15 @@ export default function LoginPage() {
             </div>
 
             {/* Developer Details */}
-            <p className="text-xs font-semibold text-slate-800 mt-1.5 leading-snug">
-              {DEVELOPER_NAME} <span className="text-slate-300 mx-1">|</span> {DEVELOPER_POSITION}
-            </p>
-            <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+            <div className="flex items-center justify-center gap-1.5 mt-1.5 flex-wrap">
+              <span className="text-xs font-bold text-slate-800">{DEVELOPER_NAME}</span>
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs font-mono text-[9.5px] font-extrabold bg-slate-900 text-sky-400 border border-sky-500/40 shadow-xs tracking-wider ring-1 ring-sky-400/20">
+                {DEVELOPER_ALIAS}
+              </span>
+              <span className="text-slate-300 mx-0.5">|</span>
+              <span className="text-xs text-slate-600">{DEVELOPER_POSITION}</span>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-1 leading-snug">
               {DEVELOPER_ORGANIZATION}
             </p>
 

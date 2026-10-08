@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { ShieldCheck, X, AlertTriangle, FileText, CheckCircle2, Building2, User, Scale } from 'lucide-react';
-import { DEVELOPER_NAME, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION } from '@/lib/constants';
+import { DEVELOPER_NAME, DEVELOPER_ALIAS, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION } from '@/lib/constants';
 
 interface EulaModalProps {
   isOpen: boolean;
@@ -68,7 +68,7 @@ export function EulaModal({ isOpen, onClose }: EulaModalProps) {
             <div className="space-y-1 text-xs">
               <span className="font-bold text-amber-950">เงื่อนไขการอนุญาตให้ใช้งานฟรี:</span>
               <p className="text-amber-800 leading-normal">
-                ระบบ e-MRA พัฒนาโดย <strong>นาย{DEVELOPER_NAME}</strong> {DEVELOPER_ORGANIZATION} อนุญาตให้หน่วยบริการสุขภาพนำไปทดลองใช้งานโดยไม่มีค่าใช้จ่าย โดยมีเงื่อนไขห้ามดัดแปลง ลบ หรือแก้ไขข้อความแสดงสิทธิและเครดิตผู้พัฒนา การดัดแปลงแก้ไขถือเป็นการสิ้นสุดการอนุญาตให้ใช้งานและถือเป็นการละเมิดลิขสิทธิ์ตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 และฉบับแก้ไขเพิ่มเติม
+                ระบบ e-MRA พัฒนาโดย <strong>นาย{DEVELOPER_NAME}</strong> <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs font-mono text-[10px] font-extrabold bg-slate-900 text-sky-400 border border-sky-500/40 shadow-xs tracking-wider ring-1 ring-sky-400/20">{DEVELOPER_ALIAS}</span> {DEVELOPER_ORGANIZATION} อนุญาตให้หน่วยบริการสุขภาพนำไปทดลองใช้งานโดยไม่มีค่าใช้จ่าย โดยมีเงื่อนไขห้ามดัดแปลง ลบ หรือแก้ไขข้อความแสดงสิทธิและเครดิตผู้พัฒนา การดัดแปลงแก้ไขถือเป็นการสิ้นสุดการอนุญาตให้ใช้งานและถือเป็นการละเมิดลิขสิทธิ์ตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 และฉบับแก้ไขเพิ่มเติม
               </p>
             </div>
           </div>
@@ -135,10 +135,14 @@ export function EulaModal({ isOpen, onClose }: EulaModalProps) {
               ผู้พัฒนาและเจ้าของลิขสิทธิ์ (Original Developer)
             </span>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-slate-800">
-              <span className="font-bold text-xs flex items-center gap-1.5">
+              <div className="font-bold text-xs flex items-center gap-1.5">
                 <User size={13} className="text-blue-900" />
-                นาย{DEVELOPER_NAME} ({DEVELOPER_POSITION})
-              </span>
+                <span>นาย{DEVELOPER_NAME}</span>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs font-mono text-[9.5px] font-extrabold bg-slate-900 text-sky-400 border border-sky-500/40 shadow-xs tracking-wider ring-1 ring-sky-400/20">
+                  {DEVELOPER_ALIAS}
+                </span>
+                <span className="text-slate-500 font-normal">({DEVELOPER_POSITION})</span>
+              </div>
               <span className="text-[11px] text-slate-500 flex items-center gap-1">
                 <Building2 size={13} className="text-slate-400" />
                 {DEVELOPER_ORGANIZATION}

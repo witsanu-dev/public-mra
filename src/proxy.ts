@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE_NAME, verifySessionToken } from '@/lib/auth-token';
 import {
   DEVELOPER_NAME,
+  DEVELOPER_ALIAS,
   DEVELOPER_POSITION,
   DEVELOPER_ORGANIZATION,
   DEVELOPER_SIGNATURE,
@@ -11,7 +12,7 @@ import {
 /**
  * Hardcoded Expected SHA-256 Author Signature (Immutable Double-Check)
  */
-const REQUIRED_AUTHOR_SIGNATURE = '02b8d6bf3e6e98533c9fc860a4d05fb1c35f0619b638af5d47683171e5c29070';
+const REQUIRED_AUTHOR_SIGNATURE = '56bbd280aadba91a3567c573b3c6179d743e54bae0b598a81d82a6f2583993b5';
 
 /**
  * Render tamper detection security response
@@ -28,7 +29,7 @@ function createTamperDetectedResponse(isApi: boolean): NextResponse {
           conditions: 'ห้ามดัดแปลง ลบ หรือแก้ไขชื่อผู้พัฒนา ห้ามจำหน่าย แจกจ่ายต่อ หรือใช้ในเชิงพาณิชย์โดยเด็ดขาด',
         },
         author: {
-          name: 'นายวิษณุ ศรีโยธา',
+          name: 'นายวิษณุ ศรีโยธา (wITsaNU _<)',
           position: 'นักวิชาการคอมพิวเตอร์',
           organization: 'กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์',
         },
@@ -83,7 +84,7 @@ function createTamperDetectedResponse(isApi: boolean): NextResponse {
 
     <div class="box">
       <div class="box-title">ข้อมูลผู้พัฒนาต้นฉบับ (Original Author)</div>
-      <div class="author-name">นายวิษณุ ศรีโยธา</div>
+      <div class="author-name">นายวิษณุ ศรีโยธา <span style="font-family: monospace; font-size: 13px; color: #38bdf8; background: #0284c720; padding: 2px 6px; border-radius: 4px; border: 1px solid #38bdf840; margin-left: 6px;">wITsaNU _&lt;</span></div>
       <div class="author-desc">นักวิชาการคอมพิวเตอร์</div>
       <div class="author-desc">กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์</div>
     </div>
@@ -189,7 +190,12 @@ export async function proxy(req: NextRequest) {
   }
 
   // ── 0. Author Tamper Integrity Check ──
-  const computedAuthorHash = await computeDeveloperHash(DEVELOPER_NAME, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION);
+  const computedAuthorHash = await computeDeveloperHash(
+    DEVELOPER_NAME,
+    DEVELOPER_ALIAS,
+    DEVELOPER_POSITION,
+    DEVELOPER_ORGANIZATION
+  );
   if (
     computedAuthorHash !== REQUIRED_AUTHOR_SIGNATURE ||
     DEVELOPER_SIGNATURE !== REQUIRED_AUTHOR_SIGNATURE

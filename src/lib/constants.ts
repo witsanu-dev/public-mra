@@ -28,27 +28,29 @@ export function assetUrl(path: string): string {
 
 /**
  * Developer & Authorship Metadata (Protected by Tamper Integrity Check)
- * ห้ามแก้ไขหรือดัดแปลงชื่อ ตำแหน่ง และหน่วยงานผู้พัฒนาโดยไม่ได้รับอนุญาต
+ * ห้ามแก้ไขหรือดัดแปลงชื่อ ฉายา ตำแหน่ง และหน่วยงานผู้พัฒนาโดยไม่ได้รับอนุญาต
  */
 export const DEVELOPER_NAME = 'วิษณุ ศรีโยธา';
+export const DEVELOPER_ALIAS = 'wITsaNU _<';
 export const DEVELOPER_POSITION = 'นักวิชาการคอมพิวเตอร์';
 export const DEVELOPER_ORGANIZATION = 'กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์';
 
 /**
  * Expected SHA-256 signature for:
- * `${DEVELOPER_NAME}|${DEVELOPER_POSITION}|${DEVELOPER_ORGANIZATION}`
+ * `${DEVELOPER_NAME}|${DEVELOPER_ALIAS}|${DEVELOPER_POSITION}|${DEVELOPER_ORGANIZATION}`
  */
-export const DEVELOPER_SIGNATURE = '02b8d6bf3e6e98533c9fc860a4d05fb1c35f0619b638af5d47683171e5c29070';
+export const DEVELOPER_SIGNATURE = '56bbd280aadba91a3567c573b3c6179d743e54bae0b598a81d82a6f2583993b5';
 
 /**
  * Computes the SHA-256 hash of developer credentials using Web Crypto API
  */
 export async function computeDeveloperHash(
   name = DEVELOPER_NAME,
+  alias = DEVELOPER_ALIAS,
   position = DEVELOPER_POSITION,
   org = DEVELOPER_ORGANIZATION
 ): Promise<string> {
-  const payload = `${name}|${position}|${org}`;
+  const payload = `${name}|${alias}|${position}|${org}`;
   const encoded = new TextEncoder().encode(payload);
   const buf = await crypto.subtle.digest('SHA-256', encoded);
   return Array.from(new Uint8Array(buf))
