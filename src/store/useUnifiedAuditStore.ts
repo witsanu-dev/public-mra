@@ -808,7 +808,7 @@ export const useUnifiedAuditStore = create<UnifiedAuditStore>((set, get) => ({
   loadExistingAudit: async (vn: string) => {
     if (!vn) return false;
     try {
-      const res = await fetch(`/api/mra/audit?vn=${encodeURIComponent(vn)}`);
+      const res = await fetch(apiUrl(`/api/mra/audit?vn=${encodeURIComponent(vn)}`));
       const json = await res.json();
       if (json.success && json.data) {
         const audit = json.data;
@@ -906,7 +906,7 @@ export const useUnifiedAuditStore = create<UnifiedAuditStore>((set, get) => ({
       if (currentSampleItemId) params.set('itemId', currentSampleItemId);
       if (currentAuditId) params.set('auditId', currentAuditId);
 
-      const res = await fetch(`/api/mra/audit?${params.toString()}`, { method: 'DELETE' });
+      const res = await fetch(apiUrl(`/api/mra/audit?${params.toString()}`), { method: 'DELETE' });
       const json = await res.json();
       if (json.success) {
         set({

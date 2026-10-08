@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { SearchableSelect, SearchableOption } from '@/components/ui/SearchableSelect';
@@ -230,7 +231,7 @@ export default function AuditLogsPage() {
       if (dateFrom) params.set('dateFrom', dateFrom);
       if (dateTo) params.set('dateTo', dateTo);
 
-      const res = await fetch(`/api/settings/audit-trail?${params.toString()}`);
+      const res = await fetch(apiUrl(`/api/settings/audit-trail?${params.toString()}`));
       const json = await res.json();
 
       if (json.success && json.data) {
@@ -372,7 +373,7 @@ export default function AuditLogsPage() {
       if (dateFrom) params.set('dateFrom', dateFrom);
       if (dateTo) params.set('dateTo', dateTo);
 
-      const res = await fetch(`/api/settings/audit-trail?${params.toString()}`);
+      const res = await fetch(apiUrl(`/api/settings/audit-trail?${params.toString()}`));
       const json = await res.json();
 
       if (!json.success || !json.data?.items?.length) {

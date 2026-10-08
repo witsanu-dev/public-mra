@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
@@ -189,7 +190,7 @@ export default function ReportsPage() {
       if (monthFilter !== 'ALL') params.append('month', monthFilter);
       if (caseTypeFilter !== 'ALL') params.append('caseType', caseTypeFilter);
 
-      const res = await fetch(`/api/mra/reports?${params.toString()}`);
+      const res = await fetch(apiUrl(`/api/mra/reports?${params.toString()}`));
       const json = await res.json();
 
       if (json.success && json.data) {

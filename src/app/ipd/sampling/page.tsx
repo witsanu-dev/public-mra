@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -284,7 +285,7 @@ export default function IpdSamplingPage() {
     async function loadMeta() {
       try {
         setMetaLoading(true);
-        const res = await fetch('/api/his/ipd-meta');
+        const res = await fetch(apiUrl('/api/his/ipd-meta'));
         const json = await res.json().catch(() => null);
         if (json?.isHisOffline) {
           setIsHisOffline(true);
@@ -324,7 +325,7 @@ export default function IpdSamplingPage() {
   const loadHistory = async () => {
     try {
       setHistoryLoading(true);
-      const res = await fetch('/api/mra/ipd-batches');
+      const res = await fetch(apiUrl('/api/mra/ipd-batches'));
       const json = await res.json();
       if (json.success && json.data) {
         setHistoryBatches(json.data);
@@ -371,7 +372,7 @@ export default function IpdSamplingPage() {
       setSamples([]);
       setCurrentBatchId(null);
 
-      const res = await fetch('/api/his/ipd-sample', {
+      const res = await fetch(apiUrl('/api/his/ipd-sample'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -517,7 +518,7 @@ export default function IpdSamplingPage() {
   const loadBatchById = async (batchId: string, silent = false) => {
     try {
       setIsSampling(true);
-      const res = await fetch(`/api/mra/ipd-batches?batchId=${encodeURIComponent(batchId)}`);
+      const res = await fetch(apiUrl(`/api/mra/ipd-batches?batchId=${encodeURIComponent(batchId)}`));
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setCurrentBatchId(batchId);
@@ -629,7 +630,7 @@ export default function IpdSamplingPage() {
     if (!isConfirmed) return;
 
     try {
-      const res = await fetch(`/api/mra/ipd-batches?batchId=${batchId}${isForce ? '&force=true' : ''}`, { method: 'DELETE' });
+      const res = await fetch(apiUrl(`/api/mra/ipd-batches?batchId=${batchId}${isForce ? '&force=true' : ''}`), { method: 'DELETE' });
       const json = await res.json();
       if (!res.ok || !json.success) {
         throw new Error(json.error || 'ลบข้อมูลการสุ่มตรวจไม่สำเร็จ');
@@ -670,7 +671,7 @@ export default function IpdSamplingPage() {
       if (item.itemId) params.set('itemId', item.itemId);
       if (item.an) params.set('an', item.an);
 
-      const res = await fetch(`/api/mra/ipd-audit?${params.toString()}`, { method: 'DELETE' });
+      const res = await fetch(apiUrl(`/api/mra/ipd-audit?${params.toString()}`), { method: 'DELETE' });
       const json = await res.json();
       if (json.success) {
         alertSuccess('ยกเลิกสำเร็จ', 'ยกเลิกผลการตรวจประเมิน IPD เรียบร้อยแล้ว สถานะเปลี่ยนกลับเป็นรอตรวจ');
@@ -709,7 +710,7 @@ export default function IpdSamplingPage() {
     if (!isConfirmed) return;
 
     try {
-      const res = await fetch('/api/mra/ipd-batches', {
+      const res = await fetch(apiUrl('/api/mra/ipd-batches'), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ batchId, action }),
@@ -1801,7 +1802,7 @@ export default function IpdSamplingPage() {
                 onClick={async () => {
                   try {
                     setIsSavingEdit(true);
-                    const res = await fetch('/api/mra/ipd-batches', {
+                    const res = await fetch(apiUrl('/api/mra/ipd-batches'), {
                       method: 'PATCH',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({

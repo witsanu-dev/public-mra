@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
@@ -119,7 +120,7 @@ export default function ExecutiveDashboardPage() {
       if (selectedMonth !== 'ALL') params.set('month', selectedMonth);
       if (selectedService !== 'ALL') params.set('serviceType', selectedService);
 
-      const res = await fetch(`/api/mra/dashboard?${params.toString()}`);
+      const res = await fetch(apiUrl(`/api/mra/dashboard?${params.toString()}`));
       const json = await res.json();
       if (res.ok && json.success && json.data) {
         setData(json.data);

@@ -94,7 +94,7 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
   const loadSettingsWithKey = useCallback(async (keyToUse: string) => {
     setIsLoadingSettings(true);
     try {
-      const res = await fetch(`/api/settings/db?adminKey=${encodeURIComponent(keyToUse)}`, {
+      const res = await fetch(apiUrl(`/api/settings/db?adminKey=${encodeURIComponent(keyToUse)}`), {
         cache: 'no-store',
       });
       const json = await res.json();

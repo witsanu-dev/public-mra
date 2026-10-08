@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
@@ -323,7 +324,7 @@ export default function ManualPage() {
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.min.js';
 
         // Fetch binary data encoded in JSON — 100% immune to IDM and all download managers
-        const response = await fetch('/api/docs/manual?format=base64');
+        const response = await fetch(apiUrl('/api/docs/manual?format=base64'));
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ไม่สามารถดาวน์โหลดข้อมูลเอกสารได้`);
         }

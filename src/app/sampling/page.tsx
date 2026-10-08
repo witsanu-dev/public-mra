@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -179,7 +180,7 @@ export default function SamplingPage() {
     async function loadMeta() {
       try {
         setMetaLoading(true);
-        const res = await fetch('/api/his/meta');
+        const res = await fetch(apiUrl('/api/his/meta'));
         const json = await res.json().catch(() => null);
         if (json?.isHisOffline) {
           setIsHisOffline(true);
@@ -219,7 +220,7 @@ export default function SamplingPage() {
   const loadHistory = async () => {
     try {
       setHistoryLoading(true);
-      const res = await fetch('/api/mra/batches');
+      const res = await fetch(apiUrl('/api/mra/batches'));
       const json = await res.json().catch(() => null);
       if (json?.success && json?.data) {
         setHistoryBatches(json.data);
@@ -258,7 +259,7 @@ export default function SamplingPage() {
 
     try {
       setIsSampling(true);
-      const res = await fetch('/api/his/sample', {
+      const res = await fetch(apiUrl('/api/his/sample'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -384,7 +385,7 @@ export default function SamplingPage() {
   const loadBatchById = async (batchId: string, silent = false) => {
     try {
       setIsSampling(true);
-      const res = await fetch(`/api/mra/batches?batchId=${encodeURIComponent(batchId)}`);
+      const res = await fetch(apiUrl(`/api/mra/batches?batchId=${encodeURIComponent(batchId)}`));
       const json = await res.json();
       if (json.success && json.data) {
         setSamples(json.data);
@@ -483,7 +484,7 @@ export default function SamplingPage() {
     if (!editingBatch) return;
     try {
       setIsSavingEdit(true);
-      const res = await fetch('/api/mra/batches', {
+      const res = await fetch(apiUrl('/api/mra/batches'), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -550,7 +551,7 @@ export default function SamplingPage() {
     if (!ok) return;
 
     try {
-      const res = await fetch('/api/mra/batches', {
+      const res = await fetch(apiUrl('/api/mra/batches'), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ batchId: batch.batchId, action }),
@@ -608,7 +609,7 @@ export default function SamplingPage() {
     if (!ok) return;
 
     try {
-      const res = await fetch(`/api/mra/batches?batchId=${encodeURIComponent(batch.batchId)}${isForce ? '&force=true' : ''}`, {
+      const res = await fetch(apiUrl(`/api/mra/batches?batchId=${encodeURIComponent(batch.batchId)}${isForce ? '&force=true' : ''}`), {
         method: 'DELETE',
       });
       const json = await res.json();
@@ -650,7 +651,7 @@ export default function SamplingPage() {
       if (item.itemId) params.set('itemId', item.itemId);
       if (item.vn) params.set('vn', item.vn);
 
-      const res = await fetch(`/api/mra/audit?${params.toString()}`, { method: 'DELETE' });
+      const res = await fetch(apiUrl(`/api/mra/audit?${params.toString()}`), { method: 'DELETE' });
       const json = await res.json();
       if (json.success) {
         alertSuccess('ยกเลิกสำเร็จ', 'ยกเลิกผลการตรวจประเมินเรียบร้อยแล้ว สถานะเปลี่ยนกลับเป็นรอตรวจ');

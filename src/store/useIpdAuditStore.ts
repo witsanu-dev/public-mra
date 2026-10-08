@@ -298,7 +298,7 @@ export const useIpdAuditStore = create<IpdAuditStore>((set, get) => ({
   loadExistingIpdAudit: async (an: string) => {
     if (!an) return false;
     try {
-      const res = await fetch(`/api/mra/ipd-audit?an=${encodeURIComponent(an)}`);
+      const res = await fetch(apiUrl(`/api/mra/ipd-audit?an=${encodeURIComponent(an)}`));
       const json = await res.json();
       if (json.success && json.data) {
         const audit = json.data;
@@ -383,7 +383,7 @@ export const useIpdAuditStore = create<IpdAuditStore>((set, get) => ({
       if (currentSampleItemId) params.set('itemId', currentSampleItemId);
       if (currentAuditId) params.set('auditId', currentAuditId);
 
-      const res = await fetch(`/api/mra/ipd-audit?${params.toString()}`, { method: 'DELETE' });
+      const res = await fetch(apiUrl(`/api/mra/ipd-audit?${params.toString()}`), { method: 'DELETE' });
       const json = await res.json();
       if (json.success) {
         set({

@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -136,7 +137,7 @@ export default function OpdAuditPage() {
 
     try {
       setIsSaving(true);
-      const res = await fetch('/api/mra/audit', {
+      const res = await fetch(apiUrl('/api/mra/audit'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

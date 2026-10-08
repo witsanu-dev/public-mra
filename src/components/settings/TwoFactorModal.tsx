@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect } from 'react';
 import {
   ShieldCheck,
@@ -62,7 +63,7 @@ export function TwoFactorModal({ isOpen, onClose, onStatusChange }: TwoFactorMod
     setDisableError('');
     setShowBackupWarning(true);
     try {
-      const res = await fetch('/api/auth/2fa/status');
+      const res = await fetch(apiUrl('/api/auth/2fa/status'));
       const data = await res.json();
       if (res.ok && data.success) {
         setIsEnabled(data.isEnabled);
@@ -89,7 +90,7 @@ export function TwoFactorModal({ isOpen, onClose, onStatusChange }: TwoFactorMod
     setLoading(true);
     setVerifyError('');
     try {
-      const res = await fetch('/api/auth/2fa/setup', { method: 'POST' });
+      const res = await fetch(apiUrl('/api/auth/2fa/setup'), { method: 'POST' });
       const data = await res.json();
       if (!res.ok || !data.success) {
         alertError('ไม่สามารถเริ่มการลงทะเบียนได้', data.error || 'กรุณาลองใหม่อีกครั้ง');
@@ -121,7 +122,7 @@ export function TwoFactorModal({ isOpen, onClose, onStatusChange }: TwoFactorMod
     setVerifyError('');
 
     try {
-      const res = await fetch('/api/auth/2fa/confirm', {
+      const res = await fetch(apiUrl('/api/auth/2fa/confirm'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: cleanToken }),
@@ -162,7 +163,7 @@ export function TwoFactorModal({ isOpen, onClose, onStatusChange }: TwoFactorMod
 
     try {
       const payload = disableMethod === 'otp' ? { code: disableInput.trim() } : { password: disableInput.trim() };
-      const res = await fetch('/api/auth/2fa/disable', {
+      const res = await fetch(apiUrl('/api/auth/2fa/disable'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

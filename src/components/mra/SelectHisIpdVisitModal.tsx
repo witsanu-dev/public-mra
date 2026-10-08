@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useCallback, useMemo, useTransition, useRef } from 'react';
 import {
   Search,
@@ -177,7 +178,7 @@ export function SelectHisIpdVisitModal({ isOpen, onClose }: SelectHisIpdVisitMod
         if (date.trim()) params.append('date', date.trim());
         params.append('limit', '30');
 
-        const res = await fetch(`/api/his/ipd-search?${params.toString()}`);
+        const res = await fetch(apiUrl(`/api/his/ipd-search?${params.toString()}`));
         const json = await res.json();
 
         if (!res.ok || !json.success) {
@@ -204,7 +205,7 @@ export function SelectHisIpdVisitModal({ isOpen, onClose }: SelectHisIpdVisitMod
   const loadBatches = useCallback(async () => {
     setIsLoadingBatches(true);
     try {
-      const res = await fetch('/api/mra/ipd-batches');
+      const res = await fetch(apiUrl('/api/mra/ipd-batches'));
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         const activeOnly = json.data.filter((b: IpdBatchOption) => b.status !== 'cancelled');
@@ -226,7 +227,7 @@ export function SelectHisIpdVisitModal({ isOpen, onClose }: SelectHisIpdVisitMod
     if (!batchId) return;
     setIsLoadingItems(true);
     try {
-      const res = await fetch(`/api/mra/ipd-batches?batchId=${batchId}`);
+      const res = await fetch(apiUrl(`/api/mra/ipd-batches?batchId=${batchId}`));
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setBatchItems(json.data);

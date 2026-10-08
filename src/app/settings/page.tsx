@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -141,7 +142,7 @@ export default function SettingsPage() {
   // Load MFA status
   const load2FaStatus = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/2fa/status');
+      const res = await fetch(apiUrl('/api/auth/2fa/status'));
       const json = await res.json();
       if (json.success) {
         setMy2FaEnabled(json.isEnabled);
@@ -155,7 +156,7 @@ export default function SettingsPage() {
   const loadAdmin2FaList = useCallback(async () => {
     setIsAdmin2FaLoading(true);
     try {
-      const res = await fetch('/api/auth/2fa/admin');
+      const res = await fetch(apiUrl('/api/auth/2fa/admin'));
       const json = await res.json();
       if (json.success && json.users) {
         setAdmin2FaUsers(json.users);
@@ -180,7 +181,7 @@ export default function SettingsPage() {
     if (!ok) return;
 
     try {
-      const res = await fetch('/api/auth/2fa/admin', {
+      const res = await fetch(apiUrl('/api/auth/2fa/admin'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ targetLoginname, action: 'reset' }),
@@ -211,7 +212,7 @@ export default function SettingsPage() {
 
     setIsSyncingUsers(true);
     try {
-      const res = await fetch('/api/users/sync', { method: 'POST' });
+      const res = await fetch(apiUrl('/api/users/sync'), { method: 'POST' });
       const json = await res.json();
       if (json.success) {
         alertSuccess('ซิงค์ข้อมูลสำเร็จ', json.message);
@@ -237,7 +238,7 @@ export default function SettingsPage() {
   const loadSettings = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/settings/db');
+      const res = await fetch(apiUrl('/api/settings/db'));
       const json = await res.json();
       if (json.success && json.data) {
         if (json.data.his) {
@@ -271,7 +272,7 @@ export default function SettingsPage() {
     setIsBackupInfoLoading(true);
     setBackupInfoError(null);
     try {
-      const res = await fetch('/api/settings/db/backup?info=true');
+      const res = await fetch(apiUrl('/api/settings/db/backup?info=true'));
       const json = await res.json();
       if (json.success && json.data) {
         setBackupInfo(json.data);
@@ -300,7 +301,7 @@ export default function SettingsPage() {
   const handleTestHis = async () => {
     setHisTest({ tested: false, loading: true, success: false });
     try {
-      const res = await fetch('/api/settings/db/test', {
+      const res = await fetch(apiUrl('/api/settings/db/test'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type: 'his', config: hisConfig }),
@@ -339,7 +340,7 @@ export default function SettingsPage() {
   const handleTestMra = async () => {
     setMraTest({ tested: false, loading: true, success: false });
     try {
-      const res = await fetch('/api/settings/db/test', {
+      const res = await fetch(apiUrl('/api/settings/db/test'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type: 'mra', config: mraConfig }),
@@ -396,7 +397,7 @@ export default function SettingsPage() {
 
     setIsSaving(true);
     try {
-      const res = await fetch('/api/settings/db', {
+      const res = await fetch(apiUrl('/api/settings/db'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -444,7 +445,7 @@ export default function SettingsPage() {
 
     setIsBackingUp(true);
     try {
-      const res = await fetch(`/api/settings/db/backup?mode=${selectedMode}`);
+      const res = await fetch(apiUrl(`/api/settings/db/backup?mode=${selectedMode}`));
       if (!res.ok) {
         const errJson = await res.json().catch(() => ({}));
         throw new Error(errJson.error || 'ไม่สามารถสร้างไฟล์สำรองข้อมูลได้');

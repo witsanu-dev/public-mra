@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { DatabaseArrowDown, Building2, Layers, Search } from 'lucide-react';
 import { useUnifiedAuditStore } from '@/store/useUnifiedAuditStore';
@@ -242,7 +243,7 @@ export function SelectHisVisitModal({ isOpen, onClose }: SelectHisVisitModalProp
       if (activeCaseType !== 'all') params.set('caseType', activeCaseType);
       params.set('limit', '30');
 
-      const res = await fetch(`/api/his/search?${params.toString()}`);
+      const res = await fetch(apiUrl(`/api/his/search?${params.toString()}`));
       const json = await res.json();
       if (json.success && json.data) {
         setHisVisits(json.data.visits || []);
@@ -273,7 +274,7 @@ export function SelectHisVisitModal({ isOpen, onClose }: SelectHisVisitModalProp
   const loadBatches = async () => {
     setIsLoadingBatches(true);
     try {
-      const res = await fetch('/api/mra/batches');
+      const res = await fetch(apiUrl('/api/mra/batches'));
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         const activeOnly = json.data.filter((b: BatchOption) => b.status !== 'cancelled');
@@ -295,7 +296,7 @@ export function SelectHisVisitModal({ isOpen, onClose }: SelectHisVisitModalProp
     if (!batchId) return;
     setIsLoadingItems(true);
     try {
-      const res = await fetch(`/api/mra/batches?batchId=${batchId}`);
+      const res = await fetch(apiUrl(`/api/mra/batches?batchId=${batchId}`));
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setBatchItems(json.data);

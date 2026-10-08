@@ -1,5 +1,6 @@
 'use client';
 
+import { apiUrl } from '@/lib/constants';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -166,7 +167,7 @@ export default function IpdAssessmentPage() {
 
     try {
       setIsSaving(true);
-      const res = await fetch('/api/mra/ipd-audit', {
+      const res = await fetch(apiUrl('/api/mra/ipd-audit'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
