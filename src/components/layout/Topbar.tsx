@@ -32,6 +32,7 @@ import {
 import { useAuthStore } from '@/store/useAuthStore';
 import { alertConfirm } from '@/lib/mra-alert';
 import { TwoFactorModal } from '@/components/settings/TwoFactorModal';
+import { apiUrl } from '@/lib/constants';
 
 interface TopbarProps {
   onMenuOpen: () => void;
@@ -145,7 +146,7 @@ export function Topbar({ onMenuOpen }: TopbarProps) {
   useEffect(() => {
     if (isDropdownOpen) {
       if (!securityKey) {
-        fetch('/api/auth/me')
+        fetch(apiUrl('/api/auth/me'))
           .then((res) => res.json())
           .then((json) => {
             if (json.securityKey) {
@@ -155,7 +156,7 @@ export function Topbar({ onMenuOpen }: TopbarProps) {
           .catch(() => { });
       }
       // Fetch 2FA status
-      fetch('/api/auth/2fa/status')
+      fetch(apiUrl('/api/auth/2fa/status'))
         .then((res) => res.json())
         .then((json) => {
           if (json.success) {

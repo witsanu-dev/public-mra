@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { initialIpdAuditTableRows, IpdAuditTableRow, ScoreValue } from '@/lib/mra-ipd-types';
+import { apiUrl } from '@/lib/constants';
 
 export interface IpdAuditStore {
   // Hospital and admission info
@@ -405,7 +406,7 @@ export const useIpdAuditStore = create<IpdAuditStore>((set, get) => ({
     const { hcode, hname } = get();
     if (!force && hcode && hname) return;
     try {
-      const res = await fetch('/api/his/meta');
+      const res = await fetch(apiUrl('/api/his/meta'));
       const json = await res.json();
       if (json.success && json.data) {
         set({

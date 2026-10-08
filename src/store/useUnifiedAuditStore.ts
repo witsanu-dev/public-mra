@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { initialAuditTableRows, AuditTableRow, ScoreValue } from '@/lib/mra-table-types';
+import { apiUrl } from '@/lib/constants';
 
 export interface CriteriaItem {
   id: string;
@@ -928,7 +929,7 @@ export const useUnifiedAuditStore = create<UnifiedAuditStore>((set, get) => ({
     const { hcode, hname } = get();
     if (!force && hcode && hname) return;
     try {
-      const res = await fetch('/api/his/meta');
+      const res = await fetch(apiUrl('/api/his/meta'));
       const json = await res.json();
       if (json.success && json.data) {
         set({
