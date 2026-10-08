@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Terminal } from 'lucide-react';
-import { APP_VERSION, APP_YEAR } from '@/lib/constants';
+import { APP_VERSION, APP_YEAR, DEVELOPER_NAME, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION } from '@/lib/constants';
 import { HisStatusBadge } from '@/components/ui/HisStatusBadge';
 
 export function Footer() {
@@ -24,14 +24,14 @@ export function Footer() {
               <span className="font-black tracking-wider uppercase text-[10px] bg-gradient-to-r from-sky-700 to-slate-800 bg-clip-text text-transparent">
                 DEVELOPMENT BY
               </span>
-              <span className="font-bold text-sky-600">วิษณุ ศรีโยธา</span>
+              <span className="font-bold text-sky-600">{DEVELOPER_NAME}</span>
               <span className="text-slate-300 hidden sm:inline">|</span>
-              <span className="text-slate-600 text-[10.5px]">นักวิชาการคอมพิวเตอร์</span>
+              <span className="text-slate-600 text-[10.5px]">{DEVELOPER_POSITION}</span>
             </div>
 
             <div className="flex items-center gap-1.5 text-slate-500 text-[10px] sm:text-[10.5px] justify-center sm:justify-start flex-wrap sm:flex-nowrap">
               <span className="hidden sm:inline text-slate-300">•</span>
-              <span className="text-center sm:text-left">กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์</span>
+              <span className="text-center sm:text-left">{DEVELOPER_ORGANIZATION}</span>
             </div>
           </div>
         </div>

@@ -1,5 +1,106 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SESSION_COOKIE_NAME, verifySessionToken } from '@/lib/auth-token';
+import {
+  DEVELOPER_NAME,
+  DEVELOPER_POSITION,
+  DEVELOPER_ORGANIZATION,
+  DEVELOPER_SIGNATURE,
+  computeDeveloperHash,
+} from '@/lib/constants';
+
+/**
+ * Hardcoded Expected SHA-256 Author Signature (Immutable Double-Check)
+ */
+const REQUIRED_AUTHOR_SIGNATURE = '02b8d6bf3e6e98533c9fc860a4d05fb1c35f0619b638af5d47683171e5c29070';
+
+/**
+ * Render tamper detection security response
+ */
+function createTamperDetectedResponse(isApi: boolean): NextResponse {
+  if (isApi) {
+    return new NextResponse(
+      JSON.stringify({
+        success: false,
+        error: 'TAMPER_DETECTED: ข้อมูลลิขสิทธิ์และชื่อผู้พัฒนาถูกดัดแปลง การอนุญาตให้ใช้งานสิ้นสุดลงทันทีตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 (ห้ามจำหน่าย แจกจ่ายต่อ หรือใช้ในเชิงพาณิชย์)',
+        code: 'INTEGRITY_VIOLATION',
+        policy: {
+          license: 'e-MRA Software Trial License (Non-Commercial)',
+          conditions: 'ห้ามดัดแปลง ลบ หรือแก้ไขชื่อผู้พัฒนา ห้ามจำหน่าย แจกจ่ายต่อ หรือใช้ในเชิงพาณิชย์โดยเด็ดขาด',
+        },
+        author: {
+          name: 'นายวิษณุ ศรีโยธา',
+          position: 'นักวิชาการคอมพิวเตอร์',
+          organization: 'กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์',
+        },
+      }),
+      {
+        status: 403,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+        },
+      }
+    );
+  }
+
+  const html = `<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Security & License Violation - e-MRA</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #1e293b; border: 1px solid #ef4444; border-radius: 8px; max-width: 640px; width: 100%; padding: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); text-align: left; }
+    .badge { display: inline-block; background: #dc2626; color: #ffffff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+    h1 { font-size: 20px; font-weight: 700; color: #ffffff; margin: 0 0 10px 0; }
+    p { font-size: 13px; color: #cbd5e1; line-height: 1.6; margin: 0 0 14px 0; }
+    .alert-box { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 12px 16px; margin: 16px 0; border-radius: 0 4px 4px 0; font-size: 12.5px; color: #fca5a5; line-height: 1.5; }
+    .box { background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 16px; margin-bottom: 18px; }
+    .box-title { font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em; }
+    .author-name { font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
+    .author-desc { font-size: 12px; color: #94a3b8; }
+    .rules { font-size: 12px; color: #94a3b8; line-height: 1.6; padding-left: 18px; margin: 12px 0; }
+    .footer-note { font-size: 11px; color: #64748b; border-top: 1px solid #334155; padding-top: 14px; margin-top: 18px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">Security Alert • Tamper & License Violation</div>
+    <h1>ระบบตรวจพบการดัดแปลงข้อมูลผู้พัฒนาและเงื่อนไขลิขสิทธิ์</h1>
+    <p>ระบบ e-MRA (Electronic Medical Record Audit) ตรวจพบว่าข้อมูลชื่อ ตำแหน่ง หรือหน่วยงานผู้พัฒนาถูกดัดแปลงหรือแก้ไข ซึ่งขัดต่อเงื่อนไขสัญญาอนุญาตให้ใช้งาน (Software Trial License Agreement)</p>
+    
+    <div class="alert-box">
+      <strong>คำชี้แจงทางกฎหมายและนโยบาย:</strong><br />
+      ระบบ e-MRA พัฒนาโดย นายวิษณุ ศรีโยธา กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย อนุญาตให้หน่วยบริการทดลองใช้งานโดยไม่มีค่าใช้จ่าย โดยมีเงื่อนไขห้ามดัดแปลง ลบ หรือแก้ไขข้อความแสดงสิทธิและเครดิตผู้พัฒนา การดัดแปลงแก้ไขถือเป็นการสิ้นสุดการอนุญาตให้ใช้งานและถือเป็นการละเมิดลิขสิทธิ์ตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 และฉบับแก้ไขเพิ่มเติม
+    </div>
+
+    <ul class="rules">
+      <li><strong>ห้ามจำหน่ายหรือใช้ในเชิงพาณิชย์:</strong> ห้ามนำไปจำหน่าย แสวงหากำไร หรือคิดค่าบริการในเชิงพาณิชย์โดยเด็ดขาด</li>
+      <li><strong>ห้ามแจกจ่ายต่อโดยมิชอบ:</strong> ห้ามนำไปเผยแพร่หรือแจกจ่ายต่อในนามบุคคลอื่นโดยไม่ได้รับความยินยอมเป็นลายลักษณ์อักษร</li>
+      <li><strong>การแก้ไขเพื่อเข้าใช้งาน:</strong> กรุณาใช้ข้อมูลเครดิตผู้พัฒนาต้นฉบับใน <code>src/lib/constants.ts</code> เพื่อเข้าใช้งานตามปกติ</li>
+    </ul>
+
+    <div class="box">
+      <div class="box-title">ข้อมูลผู้พัฒนาต้นฉบับ (Original Author)</div>
+      <div class="author-name">นายวิษณุ ศรีโยธา</div>
+      <div class="author-desc">นักวิชาการคอมพิวเตอร์</div>
+      <div class="author-desc">กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์</div>
+    </div>
+    
+    <div class="footer-note">e-MRA Electronic Medical Record Audit • All Rights Reserved (Non-Commercial Trial License)</div>
+  </div>
+</body>
+</html>`;
+
+  return new NextResponse(html, {
+    status: 403,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store, no-cache, must-revalidate',
+    },
+  });
+}
 
 /**
  * Public routes that do not require authentication
@@ -87,6 +188,15 @@ export async function proxy(req: NextRequest) {
     }
   }
 
+  // ── 0. Author Tamper Integrity Check ──
+  const computedAuthorHash = await computeDeveloperHash(DEVELOPER_NAME, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION);
+  if (
+    computedAuthorHash !== REQUIRED_AUTHOR_SIGNATURE ||
+    DEVELOPER_SIGNATURE !== REQUIRED_AUTHOR_SIGNATURE
+  ) {
+    return createTamperDetectedResponse(pathname.startsWith('/api/'));
+  }
+
   // 3. Allow public paths
   const isPublicPath = PUBLIC_PATHS.has(pathname) || pathname.startsWith('/docs/');
 
@@ -168,12 +278,7 @@ export default proxy;
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
+    '/',
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 };

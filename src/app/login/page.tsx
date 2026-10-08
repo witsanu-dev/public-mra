@@ -25,9 +25,10 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { alertInput, alertSuccess } from '@/lib/mra-alert';
-import { APP_VERSION, APP_YEAR, apiUrl, assetUrl, BASE_PATH } from '@/lib/constants';
+import { APP_VERSION, APP_YEAR, apiUrl, assetUrl, BASE_PATH, DEVELOPER_NAME, DEVELOPER_POSITION, DEVELOPER_ORGANIZATION } from '@/lib/constants';
 import { HisStatusBadge } from '@/components/ui/HisStatusBadge';
 import { DatabaseConnectionModal } from '@/components/settings/DatabaseConnectionModal';
+import { EulaModal } from '@/components/mra/EulaModal';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [isDbModalOpen, setIsDbModalOpen] = useState(false);
+  const [isEulaModalOpen, setIsEulaModalOpen] = useState(false);
 
   // MFA state
   const [authStep, setAuthStep] = useState<'credentials' | '2fa'>('credentials');
@@ -543,11 +545,23 @@ export default function LoginPage() {
 
             {/* Developer Details */}
             <p className="text-xs font-semibold text-slate-800 mt-1.5 leading-snug">
-              วิษณุ ศรีโยธา <span className="text-slate-300 mx-1">|</span> นักวิชาการคอมพิวเตอร์
+              {DEVELOPER_NAME} <span className="text-slate-300 mx-1">|</span> {DEVELOPER_POSITION}
             </p>
             <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-              กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์
+              {DEVELOPER_ORGANIZATION}
             </p>
+
+            {/* License Agreement & EULA Button */}
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => setIsEulaModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 hover:bg-slate-100 text-[10.5px] font-semibold text-slate-700 hover:text-blue-900 border border-slate-200 transition-all cursor-pointer group shadow-2xs"
+              >
+                <ShieldCheck size={12} className="text-emerald-600 group-hover:scale-110 transition-transform" />
+                <span>ข้อตกลงและสัญญาอนุญาต (License Agreement)</span>
+              </button>
+            </div>
 
             {/* Divider */}
             <hr className="my-2.5 border-slate-200" />
@@ -617,6 +631,12 @@ export default function LoginPage() {
       <DatabaseConnectionModal
         isOpen={isDbModalOpen}
         onClose={() => setIsDbModalOpen(false)}
+      />
+
+      {/* ── Software License Agreement Modal (EULA) ── */}
+      <EulaModal
+        isOpen={isEulaModalOpen}
+        onClose={() => setIsEulaModalOpen(false)}
       />
     </div>
   );
