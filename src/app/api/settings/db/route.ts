@@ -22,8 +22,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Read from sys_db_connections table in db_mra with seamless fallback to .env.local
-    const settings = await getHybridDbSettings(false);
+    // Read from sys_db_connections table in db_mra with seamless fallback to .env.local (always mask passwords)
+    const settings = await getHybridDbSettings(true);
     return NextResponse.json({
       success: true,
       data: settings,

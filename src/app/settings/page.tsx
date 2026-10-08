@@ -102,9 +102,9 @@ export default function SettingsPage() {
     navicatVersionNum?: string;
   } | null>(null);
 
-  // Password visibility toggles
-  const [showHisPass, setShowHisPass] = useState(false);
-  const [showMraPass, setShowMraPass] = useState(false);
+  // Password states: securely masked by default, user inputs only when changing
+  const [isChangingHisPass, setIsChangingHisPass] = useState(false);
+  const [isChangingMraPass, setIsChangingMraPass] = useState(false);
 
   // Test status states
   const [hisTest, setHisTest] = useState<TestStatus>({
@@ -626,30 +626,33 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-                    <span>Password</span>
-                    <span className="text-rose-500">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
+                      <span>Password</span>
+                      <span className="text-rose-500">*</span>
+                    </label>
+                    {hisConfig.password && !isChangingHisPass && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsChangingHisPass(true);
+                          setHisConfig({ ...hisConfig, password: '' });
+                        }}
+                        className="text-[10px] text-teal-700 hover:text-teal-900 font-semibold underline cursor-pointer"
+                      >
+                        เปลี่ยนรหัสผ่าน
+                      </button>
+                    )}
+                  </div>
                   <div className="relative">
                     <input
-                      type={showHisPass ? 'text' : 'password'}
+                      type="password"
+                      autoComplete="new-password"
                       value={hisConfig.password}
                       onChange={(e) => setHisConfig({ ...hisConfig, password: e.target.value })}
-                      placeholder="••••••••••••"
-                      className="w-full text-xs font-mono px-3 py-2 pr-9 bg-slate-50 border border-slate-200 rounded-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+                      placeholder={isChangingHisPass ? 'พิมพ์รหัสผ่านใหม่' : '•••••••••••• (คงเดิม)'}
+                      className="w-full text-xs font-mono px-3 py-2 bg-slate-50 border border-slate-200 rounded-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors"
                     />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setShowHisPass((prev) => !prev);
-                      }}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer z-10"
-                      title={showHisPass ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                    >
-                      {showHisPass ? <EyeOff size={14} /> : <Eye size={14} />}
-                    </button>
                   </div>
                 </div>
               </div>
@@ -813,30 +816,33 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-                    <span>Password</span>
-                    <span className="text-rose-500">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
+                      <span>Password</span>
+                      <span className="text-rose-500">*</span>
+                    </label>
+                    {mraConfig.password && !isChangingMraPass && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsChangingMraPass(true);
+                          setMraConfig({ ...mraConfig, password: '' });
+                        }}
+                        className="text-[10px] text-sky-700 hover:text-sky-900 font-semibold underline cursor-pointer"
+                      >
+                        เปลี่ยนรหัสผ่าน
+                      </button>
+                    )}
+                  </div>
                   <div className="relative">
                     <input
-                      type={showMraPass ? 'text' : 'password'}
+                      type="password"
+                      autoComplete="new-password"
                       value={mraConfig.password}
                       onChange={(e) => setMraConfig({ ...mraConfig, password: e.target.value })}
-                      placeholder="••••••••••••"
-                      className="w-full text-xs font-mono px-3 py-2 pr-9 bg-slate-50 border border-slate-200 rounded-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-colors"
+                      placeholder={isChangingMraPass ? 'พิมพ์รหัสผ่านใหม่' : '•••••••••••• (คงเดิม)'}
+                      className="w-full text-xs font-mono px-3 py-2 bg-slate-50 border border-slate-200 rounded-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-colors"
                     />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setShowMraPass((prev) => !prev);
-                      }}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer z-10"
-                      title={showMraPass ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                    >
-                      {showMraPass ? <EyeOff size={14} /> : <Eye size={14} />}
-                    </button>
                   </div>
                 </div>
               </div>

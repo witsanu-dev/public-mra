@@ -73,9 +73,9 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
     password: '',
   });
 
-  // Password visibility
-  const [showHisPass, setShowHisPass] = useState(false);
-  const [showMraPass, setShowMraPass] = useState(false);
+  // Password change states (strictly never reveal plaintext password)
+  const [isChangingHisPass, setIsChangingHisPass] = useState(false);
+  const [isChangingMraPass, setIsChangingMraPass] = useState(false);
 
   // Test connection feedback
   const [hisTest, setHisTest] = useState<TestStatus>({
@@ -476,30 +476,32 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                      Password
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[11px] font-semibold text-slate-700">
+                        Password
+                      </label>
+                      {hisConfig.password && !isChangingHisPass && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsChangingHisPass(true);
+                            setHisConfig({ ...hisConfig, password: '' });
+                          }}
+                          className="text-[10px] text-teal-700 hover:text-teal-900 font-semibold underline cursor-pointer"
+                        >
+                          เปลี่ยนรหัส
+                        </button>
+                      )}
+                    </div>
                     <div className="relative flex items-center">
                       <input
-                        type={showHisPass ? 'text' : 'password'}
+                        type="password"
+                        autoComplete="new-password"
                         value={hisConfig.password}
                         onChange={(e) => setHisConfig({ ...hisConfig, password: e.target.value })}
-                        placeholder="รหัสผ่าน HIS"
-                        className="w-full px-2.5 py-1.5 pr-8 text-xs font-mono bg-white border border-slate-300 rounded-xs focus:ring-1 focus:ring-teal-500 focus:border-teal-500 outline-none"
+                        placeholder={isChangingHisPass ? 'พิมพ์รหัสผ่านใหม่' : '•••••••••••• (คงเดิม)'}
+                        className="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-slate-300 rounded-xs focus:ring-1 focus:ring-teal-500 focus:border-teal-500 outline-none"
                       />
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setShowHisPass((prev) => !prev);
-                        }}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer z-10"
-                        title={showHisPass ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                        aria-label={showHisPass ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                      >
-                        {showHisPass ? <EyeOff size={14} /> : <Eye size={14} />}
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -642,30 +644,32 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
-                      Password
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[11px] font-semibold text-slate-700">
+                        Password
+                      </label>
+                      {mraConfig.password && !isChangingMraPass && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsChangingMraPass(true);
+                            setMraConfig({ ...mraConfig, password: '' });
+                          }}
+                          className="text-[10px] text-sky-700 hover:text-sky-900 font-semibold underline cursor-pointer"
+                        >
+                          เปลี่ยนรหัส
+                        </button>
+                      )}
+                    </div>
                     <div className="relative flex items-center">
                       <input
-                        type={showMraPass ? 'text' : 'password'}
+                        type="password"
+                        autoComplete="new-password"
                         value={mraConfig.password}
                         onChange={(e) => setMraConfig({ ...mraConfig, password: e.target.value })}
-                        placeholder="รหัสผ่าน MRA"
-                        className="w-full px-2.5 py-1.5 pr-8 text-xs font-mono bg-white border border-slate-300 rounded-xs focus:ring-1 focus:ring-sky-500 focus:border-sky-500 outline-none"
+                        placeholder={isChangingMraPass ? 'พิมพ์รหัสผ่านใหม่' : '•••••••••••• (คงเดิม)'}
+                        className="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-slate-300 rounded-xs focus:ring-1 focus:ring-sky-500 focus:border-sky-500 outline-none"
                       />
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setShowMraPass((prev) => !prev);
-                        }}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer z-10"
-                        title={showMraPass ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                        aria-label={showMraPass ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
-                      >
-                        {showMraPass ? <EyeOff size={14} /> : <Eye size={14} />}
-                      </button>
                     </div>
                   </div>
                 </div>
