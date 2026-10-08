@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { alertInput, alertSuccess } from '@/lib/mra-alert';
-import { APP_VERSION, APP_YEAR } from '@/lib/constants';
+import { APP_VERSION, APP_YEAR, apiUrl, assetUrl } from '@/lib/constants';
 import { HisStatusBadge } from '@/components/ui/HisStatusBadge';
 import { DatabaseConnectionModal } from '@/components/settings/DatabaseConnectionModal';
 
@@ -70,7 +70,7 @@ export default function LoginPage() {
     setSuccessMsg('');
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -117,7 +117,7 @@ export default function LoginPage() {
     setSuccessMsg('');
 
     try {
-      const res = await fetch('/api/auth/login/2fa', {
+      const res = await fetch(apiUrl('/api/auth/login/2fa'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -187,7 +187,7 @@ export default function LoginPage() {
       finalName += '.pdf';
     }
 
-    const downloadUrl = `/api/docs/manual?filename=${encodeURIComponent(finalName)}`;
+    const downloadUrl = apiUrl(`/api/docs/manual?filename=${encodeURIComponent(finalName)}`);
     const link = document.createElement('a');
     link.href = downloadUrl;
     link.download = finalName;
@@ -244,7 +244,7 @@ export default function LoginPage() {
                 </div>
                 <div className="flex flex-col items-center shrink-0">
                   <img
-                    src="/moph-logo.png"
+                    src={assetUrl('/moph-logo.png')}
                     alt="รพ.กมลาไสย"
                     className="w-8 h-8 object-contain rounded-xs drop-shadow-2xs"
                   />
@@ -373,7 +373,7 @@ export default function LoginPage() {
                   className="group relative cursor-pointer block rounded-sm focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all transform hover:scale-[1.01] active:scale-[0.99]"
                 >
                   <img
-                    src="/logo-mra.png"
+                    src={assetUrl('/logo-mra.png')}
                     alt="โลโก้คู่มือ MRA - คลิกเพื่อดาวน์โหลด"
                     className="w-full max-w-[310px] h-auto object-contain rounded-sm drop-shadow-2xs group-hover:brightness-105 transition-all"
                   />
@@ -594,7 +594,7 @@ export default function LoginPage() {
           {/* Manual Cover Image Preview */}
           <div className="relative overflow-hidden rounded-sm border border-slate-100 bg-slate-50 w-20 sm:w-24 shadow-2xs">
             <img
-              src="/manual.png"
+              src={assetUrl('/manual.png')}
               alt="คู่มือการประเมินคุณภาพการบันทึกเวชระเบียน สปสช."
               className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
             />

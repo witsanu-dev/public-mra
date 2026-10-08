@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { RefreshCw } from 'lucide-react';
+import { apiUrl } from '@/lib/constants';
 
 export interface HisStatusData {
   connected: boolean;
@@ -25,7 +26,7 @@ export function HisStatusBadge({ className = '' }: { className?: string }) {
 
     try {
       // Append cache buster to guarantee real-time probing
-      const res = await fetch(`/api/his/status?_t=${Date.now()}`, {
+      const res = await fetch(apiUrl(`/api/his/status?_t=${Date.now()}`), {
         cache: 'no-store',
         headers: { 'Pragma': 'no-cache' },
       });

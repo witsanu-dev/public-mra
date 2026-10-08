@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import { AuthUser } from '@/lib/auth';
+import { apiUrl, BASE_PATH } from '@/lib/constants';
 
 interface AuthState {
   user: AuthUser | null;
@@ -26,7 +27,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   checkSession: async () => {
     try {
       set({ isLoading: true });
-      const res = await fetch('/api/auth/me');
+      const res = await fetch(apiUrl('/api/auth/me'));
       const json = await res.json();
       if (res.ok && json.success && json.user) {
         set({
@@ -49,12 +50,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: async () => {
     try {
       set({ isLoading: true });
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch(apiUrl('/api/auth/logout'), { method: 'POST' });
     } catch {
       // Continue cleanup
     } finally {
       set({ user: null, initialized: true, isLoading: false });
-      window.location.href = '/login';
+      window.location.href = `${BASE_PATH}/login`;
     }
   },
 }));

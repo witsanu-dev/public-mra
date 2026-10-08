@@ -21,6 +21,7 @@ import {
   MonitorCog,
 } from 'lucide-react';
 import { alertConfirm, alertSuccess, alertError, alertWarning } from '@/lib/mra-alert';
+import { apiUrl } from '@/lib/constants';
 
 export interface DatabaseConnectionModalProps {
   isOpen: boolean;
@@ -154,7 +155,7 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
 
     setHisTest({ tested: false, loading: true, success: false });
     try {
-      const res = await fetch('/api/settings/db/test', {
+      const res = await fetch(apiUrl('/api/settings/db/test'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -202,7 +203,7 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
 
     setMraTest({ tested: false, loading: true, success: false });
     try {
-      const res = await fetch('/api/settings/db/test', {
+      const res = await fetch(apiUrl('/api/settings/db/test'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -268,7 +269,7 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
 
     setIsSaving(true);
     try {
-      const res = await fetch('/api/settings/db', {
+      const res = await fetch(apiUrl('/api/settings/db'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
