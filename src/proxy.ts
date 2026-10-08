@@ -120,7 +120,7 @@ export async function proxy(req: NextRequest) {
     }
 
     // 6b. UI Pages: Redirect directly to /login with callbackUrl
-    const loginUrl = new URL('/login', req.url);
+    const loginUrl = new URL(req.nextUrl.basePath ? `${req.nextUrl.basePath}/login` : '/login', req.url);
     if (pathname !== '/' || search) {
       loginUrl.searchParams.set('callbackUrl', `${pathname}${search}`);
     }
@@ -130,7 +130,8 @@ export async function proxy(req: NextRequest) {
   // 7. Role-Based Access Control (RBAC) Route Protection
   if (user && (pathname === '/settings' || pathname.startsWith('/settings/'))) {
     if (user.role !== 'Administrator') {
-      return NextResponse.redirect(new URL('/dashboard?unauthorized=settings', req.url));
+      const destUrl = new URL(req.nextUrl.basePath ? `${req.nextUrl.basePath}/dashboard?unauthorized=settings` : '/dashboard?unauthorized=settings', req.url);
+      return NextResponse.redirect(destUrl);
     }
   }
 

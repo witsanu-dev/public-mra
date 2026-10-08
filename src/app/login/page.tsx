@@ -147,18 +147,17 @@ export default function LoginPage() {
     setUser(userData);
 
     // Smooth transition to destination or executive reports dashboard
-    let targetPath = '/dashboard';
+    let targetPath = `${BASE_PATH}/dashboard`;
     if (typeof window !== 'undefined') {
       const searchParams = new URLSearchParams(window.location.search);
       const cb = searchParams.get('callbackUrl');
       if (cb && cb.startsWith('/') && !cb.startsWith('//')) {
-        targetPath = cb;
+        targetPath = cb.startsWith(BASE_PATH) ? cb : `${BASE_PATH}${cb}`;
       }
     }
 
     setTimeout(() => {
-      router.push(targetPath);
-      router.refresh();
+      window.location.href = targetPath;
     }, 450);
   };
 
