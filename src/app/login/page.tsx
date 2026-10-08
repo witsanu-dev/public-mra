@@ -22,6 +22,10 @@ import {
   ArrowLeft,
   ShieldCheck,
   UserLock,
+  Scale,
+  Signature,
+  Handshake,
+  Gavel,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { alertInput, alertSuccess } from '@/lib/mra-alert';
@@ -42,6 +46,7 @@ export default function LoginPage() {
   const [successMsg, setSuccessMsg] = useState('');
   const [isDbModalOpen, setIsDbModalOpen] = useState(false);
   const [isEulaModalOpen, setIsEulaModalOpen] = useState(false);
+  const [eulaModalMode, setEulaModalMode] = useState<'info' | 'login_confirm'>('info');
 
   // MFA state
   const [authStep, setAuthStep] = useState<'credentials' | '2fa'>('credentials');
@@ -67,6 +72,20 @@ export default function LoginPage() {
       return;
     }
 
+    setErrorMsg('');
+    setSuccessMsg('');
+    setEulaModalMode('login_confirm');
+    setIsEulaModalOpen(true);
+  };
+
+  const handleEulaAccepted = () => {
+    setIsEulaModalOpen(false);
+    if (eulaModalMode === 'login_confirm') {
+      void executeLogin();
+    }
+  };
+
+  const executeLogin = async () => {
     setIsLoading(true);
     setErrorMsg('');
     setSuccessMsg('');
@@ -246,11 +265,11 @@ export default function LoginPage() {
                 <div className="flex flex-col items-center shrink-0">
                   <img
                     src={assetUrl('/moph-logo.png')}
-                    alt="รพ.กมลาไสย"
+                    alt="กระทรวงสาธารณสุข"
                     className="w-8 h-8 object-contain rounded-xs drop-shadow-2xs"
                   />
                   <span className="text-[9.5px] font-bold text-slate-600 tracking-tight mt-0.5 whitespace-nowrap">
-                    รพ.กมลาไสย
+                    กระทรวงสาธารณสุข
                   </span>
                 </div>
               </div>
@@ -546,9 +565,6 @@ export default function LoginPage() {
             {/* Developer Details */}
             <div className="flex items-center justify-center gap-1.5 mt-1.5 flex-wrap">
               <span className="text-xs font-bold text-slate-800">{DEVELOPER_NAME}</span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs font-mono text-[9.5px] font-extrabold bg-slate-900 text-sky-400 border border-sky-500/40 shadow-xs tracking-wider ring-1 ring-sky-400/20">
-                {DEVELOPER_ALIAS}
-              </span>
               <span className="text-slate-300 mx-0.5">|</span>
               <span className="text-xs text-slate-600">{DEVELOPER_POSITION}</span>
             </div>
@@ -560,11 +576,14 @@ export default function LoginPage() {
             <div className="mt-2">
               <button
                 type="button"
-                onClick={() => setIsEulaModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 hover:bg-slate-100 text-[10.5px] font-semibold text-slate-700 hover:text-blue-900 border border-slate-200 transition-all cursor-pointer group shadow-2xs"
+                onClick={() => {
+                  setEulaModalMode('info');
+                  setIsEulaModalOpen(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-amber-50 hover:bg-amber-100/90 text-[10.5px] font-semibold text-amber-950 hover:text-amber-900 border border-amber-300/70 hover:border-amber-400 transition-all cursor-pointer group shadow-2xs ring-1 ring-amber-400/20"
               >
-                <ShieldCheck size={12} className="text-emerald-600 group-hover:scale-110 transition-transform" />
-                <span>ข้อตกลงและสัญญาอนุญาต (License Agreement)</span>
+                <Scale size={13} className="text-amber-700 group-hover:scale-110 transition-transform" />
+                <span>ข้อตกลงการใช้งานและการอนุญาต (License Agreement)</span>
               </button>
             </div>
 
@@ -642,6 +661,8 @@ export default function LoginPage() {
       <EulaModal
         isOpen={isEulaModalOpen}
         onClose={() => setIsEulaModalOpen(false)}
+        onAccept={handleEulaAccepted}
+        acceptLabel={eulaModalMode === 'login_confirm' ? 'ยอมรับข้อตกลงและเข้าสู่ระบบ' : 'รับทราบและยอมรับข้อตกลง'}
       />
     </div>
   );

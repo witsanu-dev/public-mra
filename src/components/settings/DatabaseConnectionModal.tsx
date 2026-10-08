@@ -58,10 +58,10 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
 
   // Connection form state
   const [hisConfig, setHisConfig] = useState<DbFormState>({
-    host: '10.250.100.201',
+    host: '192.168.1.100',
     port: 3306,
     database: 'hos',
-    user: 'hxpkt',
+    user: 'his_user',
     password: '',
   });
 
@@ -432,7 +432,7 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
                       type="text"
                       value={hisConfig.host}
                       onChange={(e) => setHisConfig({ ...hisConfig, host: e.target.value })}
-                      placeholder="เช่น 10.250.100.201"
+                      placeholder="เช่น 192.168.1.100 หรือ localhost"
                       className="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-slate-300 rounded-xs focus:ring-1 focus:ring-teal-500 focus:border-teal-500 outline-none"
                     />
                   </div>
@@ -471,7 +471,7 @@ export function DatabaseConnectionModal({ isOpen, onClose, onSaved }: DatabaseCo
                       type="text"
                       value={hisConfig.user}
                       onChange={(e) => setHisConfig({ ...hisConfig, user: e.target.value })}
-                      placeholder="เช่น hxpkt"
+                      placeholder="เช่น his_user หรือ root"
                       className="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-slate-300 rounded-xs focus:ring-1 focus:ring-teal-500 focus:border-teal-500 outline-none"
                     />
                   </div>

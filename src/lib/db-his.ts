@@ -37,13 +37,13 @@ export async function reloadHisPool(newConfig?: {
 
 function getHisPool(): Pool {
   if (!pool) {
-    const host = activeHisConfig?.host || process.env.HIS_DB_HOST || '10.250.100.201';
+    const host = activeHisConfig?.host || process.env.HIS_DB_HOST || '127.0.0.1';
     const port = activeHisConfig?.port || parseInt(process.env.HIS_DB_PORT || '3306', 10);
     const database = activeHisConfig?.database || process.env.HIS_DB_DATABASE || 'hos';
-    const user = activeHisConfig?.user || process.env.HIS_DB_USER || 'hxpkt';
+    const user = activeHisConfig?.user || process.env.HIS_DB_USER || 'his_user';
     const password = activeHisConfig?.password !== undefined
       ? activeHisConfig.password
-      : (process.env.HIS_DB_PASSWORD || 'servkt');
+      : (process.env.HIS_DB_PASSWORD || '');
 
     pool = mysql.createPool({
       host,

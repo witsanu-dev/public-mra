@@ -19,7 +19,7 @@ function encryptPassword(text) {
 function parseEnvFile() {
   const envPath = path.resolve(__dirname, '..', '.env.local');
   const config = {
-    his: { host: '10.250.100.201', port: 3306, database: 'hos', user: 'hxpkt', password: 'servkt' },
+    his: { host: '127.0.0.1', port: 3306, database: 'hos', user: 'his_user', password: '' },
     mra: { host: '127.0.0.1', port: 3306, database: 'db_mra', user: 'root', password: 'password' },
   };
 

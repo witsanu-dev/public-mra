@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
         if (isAccountDisabled) {
           try {
             await executeMra(`DELETE FROM users WHERE username = ? AND auth_source = 'his_synced'`, [username]);
-          } catch {}
+          } catch { }
 
           await logAuthEvent({
             loginname: username,
@@ -143,8 +143,8 @@ export async function POST(req: NextRequest) {
           (role === 'Administrator'
             ? 'ผู้ดูแลระบบ'
             : role === 'Auditor'
-            ? 'ผู้ตรวจประเมินเวชระเบียน'
-            : 'เจ้าหน้าที่โรงพยาบาล');
+              ? 'ผู้ตรวจประเมินเวชระเบียน'
+              : 'เจ้าหน้าที่โรงพยาบาล');
 
         authUser = {
           loginname: u.loginname,
@@ -242,7 +242,7 @@ export async function POST(req: NextRequest) {
       name: SESSION_COOKIE_NAME,
       value: token,
       httpOnly: true,
-      secure: false, // Must be false for hospital internal HTTP intranet (10.250.101.18)
+      secure: false, // Must be false for hospital internal HTTP intranet
       sameSite: 'lax',
       path: '/',
       maxAge: SESSION_MAX_AGE_SEC,

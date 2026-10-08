@@ -395,7 +395,7 @@ export function Topbar({ onMenuOpen }: TopbarProps) {
                           หน่วยบริการ
                         </span>
                         <span className="font-medium text-slate-700 leading-tight text-xs block">
-                          โรงพยาบาลกมลาไสย
+                          หน่วยบริการสุขภาพ
                         </span>
                       </div>
                     </div>

@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       maxAge: 0,
       expires: new Date(0),
       httpOnly: true,
-      secure: false, // Must be false for hospital internal HTTP intranet (10.250.101.18)
+      secure: false, // Must be false for hospital internal HTTP intranet
       sameSite: 'lax',
     });
 
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       maxAge: 0,
       expires: new Date(0),
       httpOnly: true,
-      secure: false, // Must be false for hospital internal HTTP intranet (10.250.101.18)
+      secure: false, // Must be false for hospital internal HTTP intranet
       sameSite: 'lax',
     });
     return response;

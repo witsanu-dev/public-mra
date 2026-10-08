@@ -25,9 +25,6 @@ export function Footer() {
                 DEVELOPMENT BY
               </span>
               <span className="font-bold text-sky-600">{DEVELOPER_NAME}</span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs font-mono text-[9.5px] font-extrabold bg-slate-900 text-sky-400 border border-sky-500/40 shadow-xs tracking-wider ring-1 ring-sky-400/20">
-                {DEVELOPER_ALIAS}
-              </span>
               <span className="text-slate-300 hidden sm:inline">|</span>
               <span className="text-slate-600 text-[10.5px]">{DEVELOPER_POSITION}</span>
             </div>

@@ -12,7 +12,7 @@ const anuphan = Anuphan({
 
 export const metadata: Metadata = {
   title: "e-MR Medical Record Audit - ระบบประเมินคุณภาพการบันทึกเวชระเบียนอิเล็กทรอนิกส์",
-  description: "ระบบตรวจประเมินคุณภาพการบันทึกเวชระเบียนตามเกณฑ์มาตรฐาน สปสช. ปี 2563 โรงพยาบาลกมลาไสย",
+  description: "ระบบตรวจประเมินคุณภาพการบันทึกเวชระเบียนตามเกณฑ์มาตรฐาน สปสช. ปี 2563",
   icons: {
     icon: "/mra/moph-logo.png",
     shortcut: "/mra/moph-logo.png",

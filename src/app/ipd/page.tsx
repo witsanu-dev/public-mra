@@ -464,7 +464,7 @@ export default function IpdAssessmentPage() {
                 รหัสสถานบริการ
               </label>
               <Input
-                placeholder="เช่น 11078"
+                placeholder="เช่น 10000"
                 value={hcode}
                 onChange={(e) => setField('hcode', e.target.value)}
               />

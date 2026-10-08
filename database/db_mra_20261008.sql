@@ -61,8 +61,8 @@ CREATE TABLE `mra_ipd_audit`  (
   `an` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `hn` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `patient_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '11078',
-  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'โรงพยาบาลกมลาไสย',
+  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
+  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `case_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
   `is_psychiatric` tinyint(1) NOT NULL DEFAULT 0,
   `ward_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
@@ -200,8 +200,8 @@ CREATE TABLE `mra_opd_audit`  (
   `hn` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `pid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `patient_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '11078',
-  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'โรงพยาบาลกมลาไสย',
+  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
+  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `case_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
   `is_psychiatric` tinyint(1) NOT NULL DEFAULT 0,
   `diagnosis` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
@@ -372,8 +372,6 @@ CREATE TABLE `sys_db_connections`  (
 -- ----------------------------
 -- Records of sys_db_connections
 -- ----------------------------
-INSERT INTO `sys_db_connections` VALUES (1, 'his_primary', 'his', 'HIS Primary Database', '10.250.100.201', 3306, 'hos', 'hxpkt', '3ebaef0ac199c1be6edf095b6a9cb4a0:08f5302bfc13a3912e059d2422e5afec', 1, NULL, NULL, 'online', 'Main hospital HIS database', '2026-10-07 03:02:00', '2026-10-07 17:08:10');
-INSERT INTO `sys_db_connections` VALUES (2, 'mra_primary', 'mra', 'MRA Audit Database', '127.0.0.1', 3306, 'db_mra', 'root', '7686cdfdc84605cc26d9af80d1870b9a:89b73ed14bc5d4cf1f07da651ff6d2c5', 1, NULL, NULL, 'online', 'Local audit and evaluation database', '2026-10-07 03:02:00', '2026-10-07 17:08:10');
 
 -- ----------------------------
 -- Table structure for sys_security_keys
@@ -396,7 +394,6 @@ CREATE TABLE `sys_security_keys`  (
 -- ----------------------------
 -- Records of sys_security_keys
 -- ----------------------------
-INSERT INTO `sys_security_keys` VALUES (1, 'ADMIN_SETUP_KEY', '84ef6ed1f99454aaf48ef64f6b57de58:57cea8eb1596ffc07b80b663a0a632d8', 'mra@******2026', 'Admin Security Key for System Setup, Database Config & Emergency Access', 1, NULL, '2026-10-07 04:00:49', '2026-10-07 17:08:10');
 
 -- ----------------------------
 -- Table structure for users
@@ -428,7 +425,6 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'witsanu', 'วิษณุ ศรีโยธา', '0556', 17, 'นักวิชาการคอมพิวเตอร์', 'f021e1fbd2481f2f805519a8d77ccedaa783687463650f37430a7e93d319fc13207b52266a40a70be9b8b33d8b66c5f4aa1716558b628c51fb77f4c94e68c468', '74f56a1384887e800076406cca95bf37', NULL, NULL, 'Administrator', 'ผู้ดูแลระบบ', 'his_synced', 1, '2026-10-08 13:21:57', '2026-10-08 13:21:57', '2026-10-08 13:21:57', '2026-10-08 13:21:57');
 
 -- ----------------------------
 -- View structure for view_mra_category_performance

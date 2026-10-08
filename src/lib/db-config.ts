@@ -65,11 +65,11 @@ export interface TestConnectionResult {
 export function getCurrentDbSettings(maskPassword = true): SystemDbSettings {
   return {
     his: {
-      host: process.env.HIS_DB_HOST || '10.250.100.201',
+      host: process.env.HIS_DB_HOST || '127.0.0.1',
       port: parseInt(process.env.HIS_DB_PORT || '3306', 10),
       database: process.env.HIS_DB_DATABASE || 'hos',
-      user: process.env.HIS_DB_USER || 'hxpkt',
-      password: maskPassword ? (process.env.HIS_DB_PASSWORD ? '••••••••••••' : '') : (process.env.HIS_DB_PASSWORD || 'servkt'),
+      user: process.env.HIS_DB_USER || 'his_user',
+      password: maskPassword ? (process.env.HIS_DB_PASSWORD ? '••••••••••••' : '') : (process.env.HIS_DB_PASSWORD || ''),
     },
     mra: {
       host: process.env.MRA_DB_HOST || '127.0.0.1',

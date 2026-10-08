@@ -768,7 +768,7 @@ export default function SamplingPage() {
             <span className="flex items-center gap-1 text-xs text-slate-500 font-medium">
               <Building2 size={13} className="text-slate-400" />
               <span>
-                {hospitalInfo.hname || 'โรงพยาบาลกมลาไสย'} ({hospitalInfo.hcode || '11078'})
+                {hospitalInfo.hname || 'หน่วยบริการสุขภาพ'} {hospitalInfo.hcode ? `(${hospitalInfo.hcode})` : ''}
               </span>
             </span>
           </div>

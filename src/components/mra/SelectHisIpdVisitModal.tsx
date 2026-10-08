@@ -434,7 +434,7 @@ export function SelectHisIpdVisitModal({ isOpen, onClose }: SelectHisIpdVisitMod
                 <span className="flex items-center gap-1">
                   <Building2 size={12} className="text-slate-400" />
                   <span>
-                    {hospitalInfo.hname || 'โรงพยาบาลกมลาไสย'} ({hospitalInfo.hcode || '11078'})
+                    {hospitalInfo.hname || 'หน่วยบริการสุขภาพ'} {hospitalInfo.hcode ? `(${hospitalInfo.hcode})` : ''}
                   </span>
                 </span>
               </div>
