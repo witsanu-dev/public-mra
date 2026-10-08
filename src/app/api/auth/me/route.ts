@@ -60,7 +60,18 @@ export async function GET() {
               user.positionId,
               user.loginname,
               u.accessright,
-              fullPositionName
+              fullPositionName,
+              {
+                doctor_position_std_name: u.doctor_position_std_name,
+                jobposition: u.jobposition,
+                provider_id_position: u.provider_id_position,
+                entryposition: u.entryposition,
+                departmentposition: u.departmentposition,
+                groupname: u.groupname,
+                name: u.name,
+                full_name: u.full_name,
+                doctor_name: u.doctor_name,
+              }
             );
             user.role = role;
             user.roleDescription = roleDescription;

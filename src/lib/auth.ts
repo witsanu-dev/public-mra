@@ -14,58 +14,163 @@ import {
 export * from './auth-token';
 
 /**
- * Determine role according to hospital standards:
- * doctor.position_id / hos.doctor_position_std:
- * 0  = นักวิชาการคอมพิวเตอร์ = Administrator
- * 1  = แพทย์ = Auditor
- * 39 = พยาบาลวิชาชีพ = Auditor
- * 42 = เจ้าพนักงานเวชสถิติ = Auditor
- * 58 = เจ้าหน้าที่เวชระเบียน = Auditor
- * other = Officer
+ * ข้อมูลบริบทตำแหน่งและชื่อจาก HIS (HOSxP) สำหรับประเมินสิทธิ์
+ */
+export interface HisRoleContext {
+  doctor_position_std_name?: string | null;
+  jobposition?: string | null;
+  provider_id_position?: string | null;
+  entryposition?: string | null;
+  departmentposition?: string | null;
+  groupname?: string | null;
+  name?: string | null;
+  full_name?: string | null;
+  doctor_name?: string | null;
+}
+
+/**
+ * กำหนดสิทธิ์การใช้งานตามมาตรฐานสากลจาก HIS HOSxP โดยใช้ชุดคำสำคัญ (Keywords Matching)
+ * ยกเลิกการผูกกับรหัสตัวเลข position_id เพื่อรองรับทุกหน่วยบริการ (รพช./รพท./รพศ./รพ.สต.) ได้ 100%
  */
 export function mapDoctorPositionToRole(
-  positionId: number | null | undefined,
+  positionId?: number | null | undefined,
   loginname?: string,
   accessright?: string,
-  positionName?: string | null
+  positionName?: string | null,
+  context?: HisRoleContext | string | null
 ): { role: UserRole; roleDescription: string } {
   const normLogin = (loginname || '').trim().toLowerCase();
-  const posText = (positionName || '').trim().toLowerCase();
+  const normAccess = (accessright || '').trim().toUpperCase();
 
-  // 1. Administrator: position_id 0, or positionName like คอมพิวเตอร์, or system admin accounts
-  if (
-    positionId === 0 ||
-    posText.includes('คอมพิวเตอร์') ||
-    normLogin === 'admin' ||
-    normLogin === 'sa' ||
-    (accessright && accessright.toUpperCase().includes('ADMIN'))
-  ) {
-    return {
-      role: 'Administrator',
-      roleDescription: 'ผู้ดูแลระบบ',
-    };
+  // รวมข้อความทุกฟิลด์จาก HIS เข้าด้วยกันเพื่อตรวจจับ (Combined Text Matching)
+  const parts: string[] = [];
+  if (positionName) parts.push(positionName);
+
+  if (typeof context === 'string') {
+    parts.push(context);
+  } else if (context && typeof context === 'object') {
+    if (context.doctor_position_std_name) parts.push(context.doctor_position_std_name);
+    if (context.jobposition) parts.push(context.jobposition);
+    if (context.provider_id_position) parts.push(context.provider_id_position);
+    if (context.entryposition) parts.push(context.entryposition);
+    if (context.departmentposition) parts.push(context.departmentposition);
+    if (context.groupname) parts.push(context.groupname);
+    if (context.name) parts.push(context.name);
+    if (context.full_name) parts.push(context.full_name);
+    if (context.doctor_name) parts.push(context.doctor_name);
   }
 
-  // 2. Auditor:
-  // 1=แพทย์, 39=พยาบาลวิชาชีพ, 42=เจ้าพนักงานเวชสถิติ, 58=เจ้าหน้าที่เวชระเบียน
-  // or position name containing แพทย์, พยาบาล, เวชสถิติ, เวชระเบียน
-  if (
-    positionId === 1 ||
-    positionId === 39 ||
-    positionId === 42 ||
-    positionId === 58 ||
-    posText.includes('แพทย์') ||
-    posText.includes('พยาบาล') ||
-    posText.includes('เวชสถิติ') ||
-    posText.includes('เวชระเบียน')
-  ) {
-    return {
-      role: 'Auditor',
-      roleDescription: 'ผู้ตรวจประเมินเวชระเบียน (Auditor)',
-    };
+  const combinedText = parts.join(' ').toLowerCase();
+
+  // ── 1. ADMINISTRATOR (ผู้ดูแลระบบ) ──────────────────────────────────────────
+  // ก. Loginname พิเศษ
+  const adminSpecialLogins = [
+    'admin', 'admim', 'sa', 'root', 'administrator', 'sysadmin', 'ict', 'itadmin'
+  ];
+  if (adminSpecialLogins.includes(normLogin)) {
+    return { role: 'Administrator', roleDescription: 'ผู้ดูแลระบบ' };
   }
 
-  // 3. Officer: All other hospital positions
+  // ข. Accessright ใน HOSxP
+  if (
+    normAccess.includes('ADMIN') ||
+    normAccess.includes('SUPER') ||
+    normAccess.includes('SYS_ADMIN') ||
+    normAccess.includes('DEVELOPER') ||
+    /(^|[^A-Z0-9])IT([^A-Z0-9]|$)/.test(normAccess)
+  ) {
+    return { role: 'Administrator', roleDescription: 'ผู้ดูแลระบบ' };
+  }
+
+  // ค. Keywords ผู้ดูแลระบบ
+  const adminKeywords = [
+    'คอมพิวเตอร์', 'สารสนเทศ', 'เทคโนโลยี', 'ดิจิทัล', 'สุขภาพดิจิทัล',
+    'โปรแกรม', 'โปรแกรมเมอร์', 'พัฒนาระบบ', 'ผู้ดูแลระบบ', 'ดูแลระบบ',
+    'ศูนย์คอม', 'ศูนย์สารสนเทศ', 'ไอที', 'administrator', 'sysadmin',
+    'developer', 'programmer', 'ข้อมูลข่าวสาร', 'datacenter'
+  ];
+  if (
+    adminKeywords.some((kw) => combinedText.includes(kw)) ||
+    /(^|[^a-z0-9])(it|ict|admin|system)([^a-z0-9]|$)/.test(combinedText)
+  ) {
+    return { role: 'Administrator', roleDescription: 'ผู้ดูแลระบบ' };
+  }
+
+  // ── 2. AUDITOR (ผู้ตรวจประเมินเวชระเบียน) ───────────────────────────────────
+  // ก. Accessright ใน HOSxP
+  const auditorAccessKeywords = [
+    'DOCTOR', 'NURSE', 'DENTIST', 'PHARM', 'CODER', 'AUDIT', 'MRA',
+    'RECORD', 'CLINIC', 'OPD', 'IPD', 'ER'
+  ];
+  if (
+    auditorAccessKeywords.some((kw) => normAccess.includes(kw)) ||
+    /(^|[^A-Z0-9])MR([^A-Z0-9]|$)/.test(normAccess)
+  ) {
+    return { role: 'Auditor', roleDescription: 'ผู้ตรวจประเมินเวชระเบียน (Auditor)' };
+  }
+
+  // ข. Keywords ผู้ตรวจประเมินเวชระเบียน:
+  // - แพทย์ทุกสาขา
+  const doctorKeywords = [
+    'แพทย์', 'นายแพทย์', 'แพทย์หญิง', 'นพ.', 'พญ.', 'doctor', 'physician', 'dr.',
+    'ศัลย', 'อายุร', 'กุมาร', 'สูติ', 'นรีเวช', 'ออร์โธ', 'กระดูก', 'จิตเวช',
+    'จิตแพทย์', 'เวชศาสตร์', 'เวชปฏิบัติ', 'จักษุ', 'โสต', 'พยาธิ', 'รังสี',
+    'วิสัญญี', 'นิติเวช'
+  ];
+
+  // - ทันตแพทย์
+  const dentalKeywords = [
+    'ทันตแพทย์', 'ทันตกรรม', 'ทันต', 'dentist', 'dental'
+  ];
+
+  // - พยาบาล
+  const nurseKeywords = [
+    'พยาบาล', 'nurse', 'พว.', 'การพยาบาล'
+  ];
+
+  // - เวชระเบียน / Audit / ให้รหัสโรค (Coder)
+  const coderAuditKeywords = [
+    'เวชสถิติ', 'เวชระเบียน', 'สถิติเวช', 'สถิติ', 'medical record', 'audit',
+    'auditor', 'coder', 'coding', 'ผู้ให้รหัส', 'รหัสโรค', 'คุณภาพเวชระเบียน',
+    'mra', 'mr audit', 'ตรวจเวชระเบียน', 'ตรวจสอบเวชระเบียน', 'ประกันสุขภาพ',
+    'งานประกัน', 'เรียกเก็บ'
+  ];
+
+  // - เภสัชกร
+  const pharmKeywords = [
+    'เภสัช', 'เภสัชกร', 'pharmacist', 'pharmacy'
+  ];
+
+  // - สหวิชาชีพ
+  const alliedHealthKeywords = [
+    'กายภาพ', 'กายภาพบำบัด', 'จิตวิทยา', 'นักจิตวิทยา', 'กิจกรรมบำบัด',
+    'แพทย์แผนไทย', 'แพทย์แผนจีน', 'รังสีการแพทย์', 'เทคนิคการแพทย์',
+    'นักเทคนิคการแพทย์', 'โภชนาการ', 'นักกำหนดอาหาร'
+  ];
+
+  // - สาธารณสุข / รพ.สต.
+  const publicHealthKeywords = [
+    'สาธารณสุข', 'นักวิชาการสาธารณสุข', 'รพ.สต.', 'สสอ.'
+  ];
+
+  const allAuditorKeywords = [
+    ...doctorKeywords,
+    ...dentalKeywords,
+    ...nurseKeywords,
+    ...coderAuditKeywords,
+    ...pharmKeywords,
+    ...alliedHealthKeywords,
+    ...publicHealthKeywords,
+  ];
+
+  if (
+    allAuditorKeywords.some((kw) => combinedText.includes(kw)) ||
+    /(^|[^a-z0-9])(rn|rx|dr)([^a-z0-9]|$)/.test(combinedText)
+  ) {
+    return { role: 'Auditor', roleDescription: 'ผู้ตรวจประเมินเวชระเบียน (Auditor)' };
+  }
+
+  // ── 3. OFFICER (เจ้าหน้าที่ทั่วไป) ──────────────────────────────────────────
   return {
     role: 'Officer',
     roleDescription: 'เจ้าหน้าที่ทั่วไป (Officer)',

@@ -263,7 +263,18 @@ export async function syncAllUsersFromHis(): Promise<{
         u.position_id,
         u.loginname,
         u.accessright,
-        fullPositionName
+        fullPositionName,
+        {
+          doctor_position_std_name: u.doctor_position_std_name,
+          jobposition: u.jobposition,
+          provider_id_position: u.provider_id_position,
+          entryposition: u.entryposition,
+          departmentposition: u.departmentposition,
+          groupname: u.groupname,
+          name: u.name,
+          full_name: u.full_name,
+          doctor_name: u.doctor_name,
+        }
       );
 
       const displayName = (u.full_name || u.doctor_name || username).trim();
