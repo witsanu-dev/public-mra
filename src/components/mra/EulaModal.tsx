@@ -45,7 +45,7 @@ export function EulaModal({ isOpen, onClose }: EulaModalProps) {
                 </span>
               </h2>
               <p className="text-[11px] text-slate-300 mt-0.5">
-                e-MRA Software Trial License Agreement • สำหรับหน่วยบริการสุขภาพ
+                e-MR Audit Software Trial License Agreement • สำหรับหน่วยบริการสุขภาพ
               </p>
             </div>
           </div>
@@ -68,7 +68,7 @@ export function EulaModal({ isOpen, onClose }: EulaModalProps) {
             <div className="space-y-1 text-xs">
               <span className="font-bold text-amber-950">เงื่อนไขการอนุญาตให้ใช้งานฟรี:</span>
               <p className="text-amber-800 leading-normal">
-                ระบบ e-MRA พัฒนาโดย <strong>นาย{DEVELOPER_NAME}</strong> <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs font-mono text-[10px] font-extrabold bg-slate-900 text-sky-400 border border-sky-500/40 shadow-xs tracking-wider ring-1 ring-sky-400/20">{DEVELOPER_ALIAS}</span> {DEVELOPER_ORGANIZATION} อนุญาตให้หน่วยบริการสุขภาพนำไปทดลองใช้งานโดยไม่มีค่าใช้จ่าย โดยมีเงื่อนไขห้ามดัดแปลง ลบ หรือแก้ไขข้อความแสดงสิทธิและเครดิตผู้พัฒนา การดัดแปลงแก้ไขถือเป็นการสิ้นสุดการอนุญาตให้ใช้งานและถือเป็นการละเมิดลิขสิทธิ์ตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 และฉบับแก้ไขเพิ่มเติม
+                ระบบ e-MR Audit พัฒนาโดย <strong>นาย{DEVELOPER_NAME}</strong> <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs font-mono text-[10px] font-extrabold bg-slate-900 text-sky-400 border border-sky-500/40 shadow-xs tracking-wider ring-1 ring-sky-400/20">{DEVELOPER_ALIAS}</span> {DEVELOPER_ORGANIZATION} อนุญาตให้หน่วยบริการสุขภาพนำไปทดลองใช้งานโดยไม่มีค่าใช้จ่าย โดยมีเงื่อนไขห้ามดัดแปลง ลบ หรือแก้ไขข้อความแสดงสิทธิและเครดิตผู้พัฒนา การดัดแปลงแก้ไขถือเป็นการสิ้นสุดการอนุญาตให้ใช้งานและถือเป็นการละเมิดลิขสิทธิ์ตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 และฉบับแก้ไขเพิ่มเติม
               </p>
             </div>
           </div>
@@ -154,7 +154,7 @@ export function EulaModal({ isOpen, onClose }: EulaModalProps) {
         {/* ── Modal Footer ── */}
         <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
           <span className="text-[11px] text-slate-500 text-center sm:text-left">
-            การเข้าสู่ระบบและใช้งาน e-MRA ถือว่าท่านยอมรับข้อกำหนดข้างต้น
+            การเข้าสู่ระบบและใช้งาน e-MR Audit ถือว่าท่านยอมรับข้อกำหนดข้างต้น
           </span>
           <button
             type="button"

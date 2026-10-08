@@ -25,7 +25,7 @@ function createTamperDetectedResponse(isApi: boolean): NextResponse {
         error: 'TAMPER_DETECTED: ข้อมูลลิขสิทธิ์และชื่อผู้พัฒนาถูกดัดแปลง การอนุญาตให้ใช้งานสิ้นสุดลงทันทีตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 (ห้ามจำหน่าย แจกจ่ายต่อ หรือใช้ในเชิงพาณิชย์)',
         code: 'INTEGRITY_VIOLATION',
         policy: {
-          license: 'e-MRA Software Trial License (Non-Commercial)',
+          license: 'e-MR Audit Software Trial License (Non-Commercial)',
           conditions: 'ห้ามดัดแปลง ลบ หรือแก้ไขชื่อผู้พัฒนา ห้ามจำหน่าย แจกจ่ายต่อ หรือใช้ในเชิงพาณิชย์โดยเด็ดขาด',
         },
         author: {
@@ -49,7 +49,7 @@ function createTamperDetectedResponse(isApi: boolean): NextResponse {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Security & License Violation - e-MRA</title>
+  <title>Security & License Violation - e-MR Audit</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
     .card { background: #1e293b; border: 1px solid #ef4444; border-radius: 8px; max-width: 640px; width: 100%; padding: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); text-align: left; }
@@ -69,11 +69,11 @@ function createTamperDetectedResponse(isApi: boolean): NextResponse {
   <div class="card">
     <div class="badge">Security Alert • Tamper & License Violation</div>
     <h1>ระบบตรวจพบการดัดแปลงข้อมูลผู้พัฒนาและเงื่อนไขลิขสิทธิ์</h1>
-    <p>ระบบ e-MRA (Electronic Medical Record Audit) ตรวจพบว่าข้อมูลชื่อ ตำแหน่ง หรือหน่วยงานผู้พัฒนาถูกดัดแปลงหรือแก้ไข ซึ่งขัดต่อเงื่อนไขสัญญาอนุญาตให้ใช้งาน (Software Trial License Agreement)</p>
+    <p>ระบบ e-MR Audit (Electronic Medical Record Audit) ตรวจพบว่าข้อมูลชื่อ ตำแหน่ง หรือหน่วยงานผู้พัฒนาถูกดัดแปลงหรือแก้ไข ซึ่งขัดต่อเงื่อนไขสัญญาอนุญาตให้ใช้งาน (Software Trial License Agreement)</p>
     
     <div class="alert-box">
       <strong>คำชี้แจงทางกฎหมายและนโยบาย:</strong><br />
-      ระบบ e-MRA พัฒนาโดย นายวิษณุ ศรีโยธา กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย อนุญาตให้หน่วยบริการทดลองใช้งานโดยไม่มีค่าใช้จ่าย โดยมีเงื่อนไขห้ามดัดแปลง ลบ หรือแก้ไขข้อความแสดงสิทธิและเครดิตผู้พัฒนา การดัดแปลงแก้ไขถือเป็นการสิ้นสุดการอนุญาตให้ใช้งานและถือเป็นการละเมิดลิขสิทธิ์ตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 และฉบับแก้ไขเพิ่มเติม
+      ระบบ e-MR Audit พัฒนาโดย นายวิษณุ ศรีโยธา กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย อนุญาตให้หน่วยบริการทดลองใช้งานโดยไม่มีค่าใช้จ่าย โดยมีเงื่อนไขห้ามดัดแปลง ลบ หรือแก้ไขข้อความแสดงสิทธิและเครดิตผู้พัฒนา การดัดแปลงแก้ไขถือเป็นการสิ้นสุดการอนุญาตให้ใช้งานและถือเป็นการละเมิดลิขสิทธิ์ตาม พ.ร.บ. ลิขสิทธิ์ พ.ศ. 2537 และฉบับแก้ไขเพิ่มเติม
     </div>
 
     <ul class="rules">
@@ -89,7 +89,7 @@ function createTamperDetectedResponse(isApi: boolean): NextResponse {
       <div class="author-desc">กลุ่มงานสุขภาพดิจิทัล โรงพยาบาลกมลาไสย จังหวัดกาฬสินธุ์</div>
     </div>
     
-    <div class="footer-note">e-MRA Electronic Medical Record Audit • All Rights Reserved (Non-Commercial Trial License)</div>
+    <div class="footer-note">e-MR Audit Electronic Medical Record Audit • All Rights Reserved (Non-Commercial Trial License)</div>
   </div>
 </body>
 </html>`;
