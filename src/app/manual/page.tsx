@@ -1,6 +1,6 @@
 'use client';
 
-import { apiUrl } from '@/lib/constants';
+import { apiUrl, assetUrl } from '@/lib/constants';
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
@@ -272,7 +272,7 @@ export default function ManualPage() {
     try {
       setDownloading(true);
       const filename = 'คู่มือมาตรฐานการตรวจประเมินคุณภาพเวชระเบียน_eMRA.pdf';
-      const url = `/api/docs/manual?download=true&filename=${encodeURIComponent(filename)}`;
+      const url = apiUrl(`/api/docs/manual?download=true&filename=${encodeURIComponent(filename)}`);
 
       const link = document.createElement('a');
       link.href = url;
@@ -309,7 +309,7 @@ export default function ManualPage() {
         if (!window.pdfjsLib) {
           await new Promise<void>((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = '/vendor/pdfjs/pdf.min.js';
+            script.src = assetUrl('/vendor/pdfjs/pdf.min.js');
             script.async = true;
             script.onload = () => resolve();
             script.onerror = () => reject(new Error('ไม่สามารถโหลดตัวอ่านเอกสาร PDF ได้'));
@@ -321,7 +321,7 @@ export default function ManualPage() {
           throw new Error('PDF.js library is missing');
         }
 
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.min.js';
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = assetUrl('/vendor/pdfjs/pdf.worker.min.js');
 
         // Fetch binary data encoded in JSON — 100% immune to IDM and all download managers
         const response = await fetch(apiUrl('/api/docs/manual?format=base64'));

@@ -42,8 +42,17 @@ const PUBLIC_EXTENSIONS = [
  */
 function sanitizeCallbackUrl(url: string | null): string {
   if (!url) return '/dashboard';
-  if (url.startsWith('/') && !url.startsWith('//')) {
-    return url;
+  let clean = url.trim();
+  // Strip /mra prefix if present
+  if (clean.startsWith('/mra')) {
+    clean = clean.slice(4) || '/dashboard';
+  }
+  // Prevent redirect loops to login or blank
+  if (clean === '/login' || clean === '' || clean === '/') {
+    return '/dashboard';
+  }
+  if (clean.startsWith('/') && !clean.startsWith('//')) {
+    return clean;
   }
   return '/dashboard';
 }
@@ -122,7 +131,7 @@ export async function proxy(req: NextRequest) {
 
     // 6b. UI Pages: Redirect directly to /login with callbackUrl
     const loginUrl = new URL(req.nextUrl.basePath ? `${req.nextUrl.basePath}/login` : '/login', req.url);
-    if (pathname !== '/' || search) {
+    if (pathname !== '/' && pathname !== '/login') {
       loginUrl.searchParams.set('callbackUrl', `${pathname}${search}`);
     }
     return NextResponse.redirect(loginUrl);
