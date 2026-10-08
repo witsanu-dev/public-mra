@@ -265,24 +265,24 @@ cp .env.example .env.local
 แก้ไขรายละเอียดใน `.env.local`:
 ```env
 # Hospital HIS Database (Strict Read-Only)
-HIS_DB_HOST=10.250.100.201
+HIS_DB_HOST=your_his_host_ip
 HIS_DB_PORT=3306
-HIS_DB_DATABASE=hos
-HIS_DB_USER=hxpkt
+HIS_DB_DATABASE=your_his_database
+HIS_DB_USER=your_his_user
 HIS_DB_PASSWORD=your_his_password
 
 # MRA Dedicated Database (Full Read / Write)
 MRA_DB_HOST=127.0.0.1
 MRA_DB_PORT=3306
 MRA_DB_DATABASE=db_mra
-MRA_DB_USER=root
+MRA_DB_USER=your_mra_user
 MRA_DB_PASSWORD=your_mra_password
 
 # Emergency Setup Key for pre-login database configuration & setup
-ADMIN_SETUP_KEY=mra@admin2026
+ADMIN_SETUP_KEY=your_secure_admin_setup_key
 
-# Session Secret (กำหนดข้อความสุ่มเพื่อความปลอดภัยสูงสุด)
-SESSION_SECRET=mra-hospital-audit-secret-key-2026
+# Session Secret (กำหนดข้อความสุ่ม 64 ตัวอักษรเพื่อความปลอดภัยสูงสุด)
+SESSION_SECRET=your_random_64_character_session_secret
 ```
 
 ### 4. ติดตั้ง Dependencies และ Build ระบบ
