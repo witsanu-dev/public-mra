@@ -71,7 +71,7 @@ export async function queryMra<T extends RowDataPacket[]>(
   const p = getMraPool();
   const conn = await p.getConnection();
   try {
-    await conn.query('SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci');
+    await conn.query('SET NAMES utf8mb4');
     const [rows] = await conn.query<T>(sql, params);
     return rows;
   } finally {
@@ -89,7 +89,7 @@ export async function executeMra(
   const p = getMraPool();
   const conn = await p.getConnection();
   try {
-    await conn.query('SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci');
+    await conn.query('SET NAMES utf8mb4');
     const [result] = await conn.execute<ResultSetHeader>(sql, params as any);
     return result;
   } finally {

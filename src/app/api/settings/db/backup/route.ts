@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
     const conn = await pool.getConnection();
 
     try {
-      await conn.query('SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci');
+      await conn.query('SET NAMES utf8mb4');
 
       const dbName = process.env.MRA_DB_HOST ? (process.env.MRA_DB_DATABASE || 'db_mra') : 'db_mra';
 
