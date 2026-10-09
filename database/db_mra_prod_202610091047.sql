@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : MySQL Appserv - 127.0.0.1 3306
+ Source Server         : 10.250.101.11 - website
  Source Server Type    : MySQL
- Source Server Version : 80017 (8.0.17)
- Source Host           : localhost:3306
+ Source Server Version : 80045 (8.0.45)
+ Source Host           : 10.250.101.11:3306
  Source Schema         : db_mra
 
  Target Server Type    : MySQL
- Target Server Version : 80017 (8.0.17)
+ Target Server Version : 80045 (8.0.45)
  File Encoding         : 65001
 
- Date: 08/10/2026 13:24:09
+ Date: 09/10/2026 10:47:44
 */
 
 SET NAMES utf8mb4;
@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `mra_audit_trail`;
 CREATE TABLE `mra_audit_trail`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `event_time` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `category` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `action` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -45,11 +45,7 @@ CREATE TABLE `mra_audit_trail`  (
   INDEX `idx_audit_trail_cat_action`(`category` ASC, `action` ASC, `event_time` ASC) USING BTREE,
   INDEX `idx_audit_trail_target`(`target_type` ASC, `target_id` ASC) USING BTREE,
   INDEX `idx_audit_trail_status`(`status` ASC, `severity` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_audit_trail
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 413 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_ipd_audit
@@ -61,20 +57,20 @@ CREATE TABLE `mra_ipd_audit`  (
   `an` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `hn` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `patient_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
+  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '11078',
+  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'โรงพยาบาลกมลาไสย',
   `case_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
   `is_psychiatric` tinyint(1) NOT NULL DEFAULT 0,
   `ward_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `ward_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `admit_date` datetime NULL DEFAULT NULL,
   `discharge_date` datetime NULL DEFAULT NULL,
-  `length_of_stay` int(11) NULL DEFAULT 0,
+  `length_of_stay` int NULL DEFAULT 0,
   `discharge_status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `discharge_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `diagnosis` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `sum_score` int(11) NOT NULL DEFAULT 0,
-  `full_score` int(11) NOT NULL DEFAULT 0,
+  `sum_score` int NOT NULL DEFAULT 0,
+  `full_score` int NOT NULL DEFAULT 0,
   `percentage` decimal(5, 2) NOT NULL DEFAULT 0.00,
   `is_passed` tinyint(1) NOT NULL DEFAULT 0,
   `overall_finding` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no_issue',
@@ -88,37 +84,29 @@ CREATE TABLE `mra_ipd_audit`  (
   INDEX `idx_hn`(`hn` ASC) USING BTREE,
   INDEX `idx_audit_date`(`audit_date` ASC) USING BTREE,
   INDEX `idx_ipd_case_type`(`case_type` ASC, `is_psychiatric` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_ipd_audit
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_ipd_audit_detail
 -- ----------------------------
 DROP TABLE IF EXISTS `mra_ipd_audit_detail`;
 CREATE TABLE `mra_ipd_audit_detail`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `audit_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content_no` int(11) NOT NULL,
+  `content_no` int NOT NULL,
   `content_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `na_selected` tinyint(1) NULL DEFAULT 0,
   `missing_selected` tinyint(1) NULL DEFAULT 0,
   `no_selected` tinyint(1) NOT NULL DEFAULT 0,
   `scores_json` json NOT NULL,
-  `add_score` int(11) NULL DEFAULT 0,
-  `deduct_score` int(11) NULL DEFAULT 0,
-  `calculated_full` int(11) NULL DEFAULT 0,
-  `calculated_sum` int(11) NULL DEFAULT 0,
+  `add_score` int NULL DEFAULT 0,
+  `deduct_score` int NULL DEFAULT 0,
+  `calculated_full` int NULL DEFAULT 0,
+  `calculated_sum` int NULL DEFAULT 0,
   `remark_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_audit_id`(`audit_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 829 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_ipd_audit_detail
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 829 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_ipd_sampling_batch
@@ -131,8 +119,8 @@ CREATE TABLE `mra_ipd_sampling_batch`  (
   `case_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'all',
   `date_from` date NOT NULL,
   `date_to` date NOT NULL,
-  `sample_size` int(11) NOT NULL,
-  `total_available` int(11) NOT NULL DEFAULT 0,
+  `sample_size` int NOT NULL,
+  `total_available` int NOT NULL DEFAULT 0,
   `ward_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `ward_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `status` enum('active','completed','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'active',
@@ -143,11 +131,7 @@ CREATE TABLE `mra_ipd_sampling_batch`  (
   PRIMARY KEY (`batch_id`) USING BTREE,
   INDEX `idx_sampling_date`(`sampling_date` ASC) USING BTREE,
   INDEX `idx_status`(`status` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_ipd_sampling_batch
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_ipd_sampling_item
@@ -161,7 +145,7 @@ CREATE TABLE `mra_ipd_sampling_item`  (
   `cid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `patient_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sex` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `age_y` int(11) NULL DEFAULT 0,
+  `age_y` int NULL DEFAULT 0,
   `regdate` date NOT NULL,
   `regtime` time NULL DEFAULT NULL,
   `dchdate` date NOT NULL,
@@ -173,7 +157,7 @@ CREATE TABLE `mra_ipd_sampling_item`  (
   `pttype_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `dchstts` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `dchtype` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `length_of_stay` int(11) NULL DEFAULT 1,
+  `length_of_stay` int NULL DEFAULT 1,
   `doctor_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `audit_status` enum('pending','audited') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'pending',
   `audit_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -183,11 +167,7 @@ CREATE TABLE `mra_ipd_sampling_item`  (
   INDEX `idx_ipd_an`(`an` ASC) USING BTREE,
   INDEX `idx_ipd_hn`(`hn` ASC) USING BTREE,
   INDEX `idx_ipd_status`(`audit_status` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_ipd_sampling_item
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_opd_audit
@@ -200,8 +180,8 @@ CREATE TABLE `mra_opd_audit`  (
   `hn` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `pid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `patient_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
+  `hcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '11078',
+  `hname` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'โรงพยาบาลกมลาไสย',
   `case_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
   `is_psychiatric` tinyint(1) NOT NULL DEFAULT 0,
   `diagnosis` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
@@ -209,8 +189,8 @@ CREATE TABLE `mra_opd_audit`  (
   `chronic_period_from` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `chronic_period_to` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `first_visit_date` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `sum_score` int(11) NOT NULL DEFAULT 0,
-  `full_score` int(11) NOT NULL DEFAULT 0,
+  `sum_score` int NOT NULL DEFAULT 0,
+  `full_score` int NOT NULL DEFAULT 0,
   `percentage` decimal(5, 2) NOT NULL DEFAULT 0.00,
   `is_passed` tinyint(1) NOT NULL DEFAULT 0,
   `overall_finding` enum('inadequate','no_issue','certain_issues') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'no_issue',
@@ -224,36 +204,28 @@ CREATE TABLE `mra_opd_audit`  (
   INDEX `idx_hn`(`hn` ASC) USING BTREE,
   INDEX `idx_audit_date`(`audit_date` ASC) USING BTREE,
   INDEX `idx_opd_case_type`(`case_type` ASC, `is_psychiatric` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_opd_audit
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_opd_audit_detail
 -- ----------------------------
 DROP TABLE IF EXISTS `mra_opd_audit_detail`;
 CREATE TABLE `mra_opd_audit_detail`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `audit_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content_no` int(11) NOT NULL,
+  `content_no` int NOT NULL,
   `content_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `na_selected` tinyint(1) NULL DEFAULT 0,
   `missing_selected` tinyint(1) NULL DEFAULT 0,
   `scores_json` json NOT NULL,
-  `add_score` int(11) NULL DEFAULT 0,
-  `deduct_score` int(11) NULL DEFAULT 0,
-  `calculated_full` int(11) NULL DEFAULT 0,
-  `calculated_sum` int(11) NULL DEFAULT 0,
+  `add_score` int NULL DEFAULT 0,
+  `deduct_score` int NULL DEFAULT 0,
+  `calculated_full` int NULL DEFAULT 0,
+  `calculated_sum` int NULL DEFAULT 0,
   `remark_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_audit_id`(`audit_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 871 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_opd_audit_detail
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 871 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_sampling_batch
@@ -266,8 +238,8 @@ CREATE TABLE `mra_sampling_batch`  (
   `case_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'all',
   `date_from` date NOT NULL,
   `date_to` date NOT NULL,
-  `sample_size` int(11) NOT NULL,
-  `total_available` int(11) NOT NULL DEFAULT 0,
+  `sample_size` int NOT NULL,
+  `total_available` int NOT NULL DEFAULT 0,
   `department_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `status` enum('active','completed','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
   `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
@@ -275,11 +247,7 @@ CREATE TABLE `mra_sampling_batch`  (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`batch_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_sampling_batch
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_sampling_item
@@ -293,7 +261,7 @@ CREATE TABLE `mra_sampling_item`  (
   `cid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
   `patient_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sex` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
-  `age_y` int(11) NULL DEFAULT 0,
+  `age_y` int NULL DEFAULT 0,
   `vstdate` date NOT NULL,
   `vsttime` time NULL DEFAULT NULL,
   `department` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '',
@@ -310,25 +278,21 @@ CREATE TABLE `mra_sampling_item`  (
   INDEX `idx_vn`(`vn` ASC) USING BTREE,
   INDEX `idx_hn`(`hn` ASC) USING BTREE,
   INDEX `idx_status`(`audit_status` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_sampling_item
--- ----------------------------
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for mra_user_2fa
 -- ----------------------------
 DROP TABLE IF EXISTS `mra_user_2fa`;
 CREATE TABLE `mra_user_2fa`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `loginname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_fullname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `secret_encrypted` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_enabled` tinyint(1) NOT NULL DEFAULT 0,
   `backup_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `last_used_step` bigint(20) NULL DEFAULT NULL,
-  `failed_attempts` int(11) NOT NULL DEFAULT 0,
+  `last_used_step` bigint NULL DEFAULT NULL,
+  `failed_attempts` int NOT NULL DEFAULT 0,
   `locked_until` datetime NULL DEFAULT NULL,
   `enrolled_at` datetime NULL DEFAULT NULL,
   `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
@@ -337,29 +301,25 @@ CREATE TABLE `mra_user_2fa`  (
   UNIQUE INDEX `loginname`(`loginname` ASC) USING BTREE,
   INDEX `idx_loginname`(`loginname` ASC) USING BTREE,
   INDEX `idx_enabled`(`is_enabled` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mra_user_2fa
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sys_db_connections
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_db_connections`;
 CREATE TABLE `sys_db_connections`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `connection_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `db_type` enum('his','mra') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `profile_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `port` int(11) NOT NULL DEFAULT 3306,
+  `port` int NOT NULL DEFAULT 3306,
   `database_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `password_encrypted` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `last_tested_at` datetime NULL DEFAULT NULL,
-  `last_latency_ms` int(11) NULL DEFAULT NULL,
+  `last_latency_ms` int NULL DEFAULT NULL,
   `last_status` enum('online','offline','unknown') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'unknown',
   `notes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP,
@@ -367,18 +327,14 @@ CREATE TABLE `sys_db_connections`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `connection_key`(`connection_key` ASC) USING BTREE,
   INDEX `idx_db_type_active`(`db_type` ASC, `is_active` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_db_connections
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sys_security_keys
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_security_keys`;
 CREATE TABLE `sys_security_keys`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `key_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Key identifier name (e.g. ADMIN_SETUP_KEY)',
   `key_value_encrypted` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'AES-256 encrypted security key value',
   `key_hint` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Masked hint to help Admin recall if forgotten',
@@ -389,22 +345,18 @@ CREATE TABLE `sys_security_keys`  (
   `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_key_name`(`key_name` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_security_keys
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for users
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `full_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `doctor_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `position_id` int(11) NULL DEFAULT NULL,
+  `position_id` int NULL DEFAULT NULL,
   `position_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `salt` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -420,11 +372,7 @@ CREATE TABLE `users`  (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of users
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 2438 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- View structure for view_mra_category_performance
