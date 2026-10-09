@@ -11,8 +11,8 @@ import { queryAuditTrail, logAuditEvent, AuditCategory, AuditSeverity, AuditStat
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession();
-    if (!session || !RBAC.isAdmin(session.role)) {
-      return forbiddenResponse('เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่มีสิทธิ์เข้าถึง Audit Trail Logs');
+    if (!session || !RBAC.canViewAuditLogs(session.role)) {
+      return forbiddenResponse('กรุณาเข้าสู่ระบบเพื่อเข้าถึงประวัติการใช้งานระบบ (Audit Trail Logs)');
     }
 
     const { searchParams } = new URL(req.url);

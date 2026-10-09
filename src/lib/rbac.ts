@@ -39,6 +39,13 @@ export const RBAC = {
   },
 
   /**
+   * Can view system audit logs (/audit-logs) - Accessible to all authenticated users
+   */
+  canViewAuditLogs(role?: UserRole | null): boolean {
+    return role === 'Administrator' || role === 'Auditor' || role === 'Officer';
+  },
+
+  /**
    * Can delete or revoke audit evaluations (Delete/Revoke) - Admin only
    */
   canRevokeAudit(role?: UserRole | null): boolean {

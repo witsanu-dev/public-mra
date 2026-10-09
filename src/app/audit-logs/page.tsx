@@ -243,10 +243,13 @@ export default function AuditLogsPage() {
       } else {
         setItems([]);
         setTotal(0);
+        if (json.error) {
+          alertError('ไม่สามารถโหลดข้อมูลได้', json.error);
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to load audit logs:', err);
-      alertError('เกิดข้อผิดพลาดในการโหลดข้อมูล Audit Logs');
+      alertError('เกิดข้อผิดพลาดในการโหลดข้อมูล Audit Logs', err?.message || String(err));
     } finally {
       setLoading(false);
     }
