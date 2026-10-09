@@ -19,6 +19,7 @@ import {
   Save,
 } from 'lucide-react';
 import { alertSuccess, alertError } from '@/lib/mra-alert';
+import { apiUrl } from '@/lib/constants';
 
 export interface ManualSamplingModalProps {
   isOpen: boolean;
@@ -216,7 +217,7 @@ export function ManualSamplingModal({
     setErrorMsg('');
 
     try {
-      const endpoint = isIpd ? '/api/sampling/ipd-manual' : '/api/sampling/manual';
+      const endpoint = apiUrl(isIpd ? '/api/sampling/ipd-manual' : '/api/sampling/manual');
 
       const payloadItems = items.map((it) => {
         if (isIpd) {

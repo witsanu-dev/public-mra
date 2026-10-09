@@ -18,6 +18,7 @@ import {
   RefreshCw,
   Search,
 } from 'lucide-react';
+import { apiUrl } from '@/lib/constants';
 import { exportBatchSummaryToExcel } from '@/lib/excelExport';
 import { useUnifiedAuditStore } from '@/store/useUnifiedAuditStore';
 import { useIpdAuditStore } from '@/store/useIpdAuditStore';
@@ -222,11 +223,24 @@ export function BatchSummaryModal({
 
     const endpoint =
       serviceType === 'IPD'
-        ? `/api/mra/ipd-batches/summary?batchId=${encodeURIComponent(batchId)}`
-        : `/api/mra/batches/summary?batchId=${encodeURIComponent(batchId)}`;
+        ? apiUrl(`/api/mra/ipd-batches/summary?batchId=${encodeURIComponent(batchId)}`)
+        : apiUrl(`/api/mra/batches/summary?batchId=${encodeURIComponent(batchId)}`);
 
     fetch(endpoint)
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const text = await res.text();
+          let msg = `เซิร์ฟเวอร์ส่งรหัสสถานะ ${res.status}`;
+          try {
+            const j = JSON.parse(text);
+            if (j.error) msg = j.error;
+          } catch {
+            // text is HTML or non-JSON
+          }
+          throw new Error(msg);
+        }
+        return res.json();
+      })
       .then((json) => {
         if (!mounted) return;
         if (json.success && json.data) {
