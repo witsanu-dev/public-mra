@@ -527,8 +527,8 @@ export default function SamplingPage() {
 
   // Toggle Cancel / Reactivate
   const handleToggleCancel = async (batch: BatchHistoryItem) => {
-    if (!RBAC.canDeleteBatch(user?.role)) {
-      alertError({ title: 'ไม่มีสิทธิ์ดำเนินการ', text: 'เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่สามารถยกเลิกหรือคืนสถานะรอบการสุ่มได้' });
+    if (!RBAC.canCancelBatch(user?.role)) {
+      alertError({ title: 'ไม่มีสิทธิ์ดำเนินการ', text: 'เฉพาะผู้ดูแลระบบ (Administrator) และผู้ตรวจประเมิน (Auditor) เท่านั้นที่สามารถยกเลิกหรือคืนสถานะรอบการสุ่มได้' });
       return;
     }
 
@@ -1023,7 +1023,7 @@ export default function SamplingPage() {
                     {currentBatchObj?.status === 'cancelled' ? (
                       <button
                         type="button"
-                        disabled={!RBAC.canDeleteBatch(user?.role)}
+                        disabled={!RBAC.canCancelBatch(user?.role)}
                         onClick={() => {
                           const b = currentBatchObj || {
                             batchId: currentBatchId,
@@ -1048,7 +1048,7 @@ export default function SamplingPage() {
                     ) : (
                       <button
                         type="button"
-                        disabled={!RBAC.canDeleteBatch(user?.role)}
+                        disabled={!RBAC.canCancelBatch(user?.role)}
                         onClick={() => {
                           const b = currentBatchObj || {
                             batchId: currentBatchId,
@@ -1463,7 +1463,7 @@ export default function SamplingPage() {
                               <button
                                 type="button"
                                 onClick={() => handleOpenEdit(b)}
-                                disabled={!RBAC.isAdmin(user?.role)}
+                                disabled={!RBAC.canEditBatch(user?.role)}
                                 className="w-8 h-8 rounded-sm flex items-center justify-center bg-white border border-slate-200 text-slate-600 hover:text-blue-700 hover:bg-blue-50/80 hover:border-blue-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-600 shadow-xs transition-all"
                                 title="แก้ไขข้อมูลรอบการสุ่ม"
                               >
@@ -1475,7 +1475,7 @@ export default function SamplingPage() {
                                 <button
                                   type="button"
                                   onClick={() => handleToggleCancel(b)}
-                                  disabled={!RBAC.canDeleteBatch(user?.role)}
+                                  disabled={!RBAC.canCancelBatch(user?.role)}
                                   className="w-8 h-8 rounded-sm flex items-center justify-center bg-white border border-slate-200 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50/80 hover:border-emerald-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-emerald-600 shadow-xs transition-all"
                                   title="คืนสถานะให้เปิดใช้งานรอบนี้อีกครั้ง"
                                 >
@@ -1485,7 +1485,7 @@ export default function SamplingPage() {
                                 <button
                                   type="button"
                                   onClick={() => handleToggleCancel(b)}
-                                  disabled={!RBAC.canDeleteBatch(user?.role)}
+                                  disabled={!RBAC.canCancelBatch(user?.role)}
                                   className="w-8 h-8 rounded-sm flex items-center justify-center bg-white border border-slate-200 text-amber-600 hover:text-amber-700 hover:bg-amber-50/80 hover:border-amber-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-amber-600 shadow-xs transition-all"
                                   title="ยกเลิกรอบการสุ่มนี้"
                                 >

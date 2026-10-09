@@ -652,7 +652,7 @@ export default function IpdSamplingPage() {
   // Revoke / Cancel audit for a single sampled IPD case
   const handleRevokeCaseAudit = async (item: IpdSampleVisitItem) => {
     if (!RBAC.canRevokeAudit(user?.role)) {
-      alertError({ title: 'ไม่มีสิทธิ์ดำเนินการ', text: 'เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่สามารถยกเลิกผลการตรวจประเมินได้' });
+      alertError({ title: 'ไม่มีสิทธิ์ดำเนินการ', text: 'เฉพาะผู้ดูแลระบบหรือผู้ตรวจประเมินเท่านั้นที่สามารถยกเลิกผลการตรวจประเมินได้' });
       return;
     }
 
@@ -694,8 +694,8 @@ export default function IpdSamplingPage() {
 
   // Change batch status
   const handleBatchStatusAction = async (batchId: string, action: 'cancel' | 'reactivate' | 'complete') => {
-    if (!RBAC.canDeleteBatch(user?.role)) {
-      alertError({ title: 'ไม่มีสิทธิ์ดำเนินการ', text: 'เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่สามารถเปลี่ยนสถานะรอบการสุ่มได้' });
+    if (!RBAC.canCancelBatch(user?.role)) {
+      alertError({ title: 'ไม่มีสิทธิ์ดำเนินการ', text: 'เฉพาะผู้ดูแลระบบหรือผู้ตรวจประเมินเท่านั้นที่สามารถเปลี่ยนสถานะรอบการสุ่มได้' });
       return;
     }
 
@@ -1206,7 +1206,7 @@ export default function IpdSamplingPage() {
                         {currentBatchObj?.status === 'cancelled' ? (
                           <button
                             type="button"
-                            disabled={!RBAC.canDeleteBatch(user?.role)}
+                            disabled={!RBAC.canCancelBatch(user?.role)}
                             onClick={() => handleBatchStatusAction(currentBatchId, 'reactivate')}
                             className="px-2.5 py-1 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-50 border border-emerald-300 rounded-sm flex items-center gap-1.5 transition-colors shrink-0"
                             title="คืนสถานะให้เปิดใช้งานรอบนี้อีกครั้ง"
@@ -1217,7 +1217,7 @@ export default function IpdSamplingPage() {
                         ) : (
                           <button
                             type="button"
-                            disabled={!RBAC.canDeleteBatch(user?.role)}
+                            disabled={!RBAC.canCancelBatch(user?.role)}
                             onClick={() => handleBatchStatusAction(currentBatchId, 'cancel')}
                             className="px-2.5 py-1 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-amber-50 border border-amber-300 rounded-sm flex items-center gap-1.5 transition-colors shrink-0"
                             title="ยกเลิกรอบการสุ่มนี้"
@@ -1585,7 +1585,7 @@ export default function IpdSamplingPage() {
                                     setEditStatus(b.status || 'active');
                                     setEditNote(b.note || '');
                                   }}
-                                  disabled={!RBAC.isAdmin(user?.role)}
+                                  disabled={!RBAC.canEditBatch(user?.role)}
                                   className="w-8 h-8 rounded-sm flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:text-blue-900 hover:bg-slate-100 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-500 shadow-xs transition-all"
                                   title="แก้ไขข้อมูลการสุ่ม"
                                 >
@@ -1597,7 +1597,7 @@ export default function IpdSamplingPage() {
                                   <button
                                     type="button"
                                     onClick={() => handleBatchStatusAction(b.batchId, 'reactivate')}
-                                    disabled={!RBAC.canDeleteBatch(user?.role)}
+                                    disabled={!RBAC.canCancelBatch(user?.role)}
                                     className="w-8 h-8 rounded-sm flex items-center justify-center bg-white border border-slate-200 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-emerald-600 shadow-xs transition-all"
                                     title="คืนสถานะให้เปิดใช้งานการสุ่มนี้อีกครั้ง"
                                   >
@@ -1607,7 +1607,7 @@ export default function IpdSamplingPage() {
                                   <button
                                     type="button"
                                     onClick={() => handleBatchStatusAction(b.batchId, 'cancel')}
-                                    disabled={!RBAC.canDeleteBatch(user?.role)}
+                                    disabled={!RBAC.canCancelBatch(user?.role)}
                                     className="w-8 h-8 rounded-sm flex items-center justify-center bg-white border border-slate-200 text-amber-600 hover:text-amber-700 hover:bg-amber-50 hover:border-amber-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-amber-600 shadow-xs transition-all"
                                     title="ยกเลิกรอบการสุ่มนี้"
                                   >
@@ -1800,6 +1800,10 @@ export default function IpdSamplingPage() {
               <button
                 type="button"
                 onClick={async () => {
+                  if (!RBAC.canEditBatch(user?.role)) {
+                    alertError({ title: 'ไม่มีสิทธิ์ดำเนินการ', text: 'เฉพาะผู้ดูแลระบบหรือผู้ตรวจประเมินเท่านั้นที่สามารถแก้ไขข้อมูลรอบการสุ่มได้' });
+                    return;
+                  }
                   try {
                     setIsSavingEdit(true);
                     const res = await fetch(apiUrl('/api/mra/ipd-batches'), {

@@ -388,9 +388,9 @@ export async function DELETE(req: NextRequest) {
     const itemId = searchParams.get('itemId');
     const auditIdParam = searchParams.get('auditId');
 
-    // RBAC: Only Administrator can revoke/delete IPD audits
+    // RBAC: Administrator and Auditor can revoke/cancel IPD audits (revert case to pending)
     const session = await getServerSession();
-    if (!session || !RBAC.canRevokeAudit(session.role)) {
+    if (!session || (!RBAC.isAdmin(session.role) && !RBAC.isAuditor(session.role))) {
       void logAuditEvent({
         req,
         category: 'AUDIT',
@@ -399,9 +399,9 @@ export async function DELETE(req: NextRequest) {
         severity: 'warning',
         targetType: 'ipd_admission',
         targetId: an || auditIdParam || itemId,
-        summary: 'ถูกปฏิเสธ: ไม่มีสิทธิ์ลบ/ยกเลิกผลตรวจประเมิน IPD',
+        summary: 'ถูกปฏิเสธ: ไม่มีสิทธิ์ยกเลิกผลตรวจประเมิน IPD',
       });
-      return forbiddenResponse('เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่มีสิทธิ์ลบหรือยกเลิกผลการตรวจประเมิน IPD');
+      return forbiddenResponse('เฉพาะผู้ดูแลระบบ (Administrator) และผู้ตรวจประเมิน (Auditor) เท่านั้นที่มีสิทธิ์ยกเลิกผลการตรวจประเมิน IPD');
     }
 
     if (!an && !itemId && !auditIdParam) {

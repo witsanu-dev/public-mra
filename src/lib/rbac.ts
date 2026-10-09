@@ -46,16 +46,37 @@ export const RBAC = {
   },
 
   /**
-   * Can delete or revoke audit evaluations (Delete/Revoke) - Admin only
+   * Can edit batch metadata (batchName, note) - Admin and Auditor
    */
-  canRevokeAudit(role?: UserRole | null): boolean {
+  canEditBatch(role?: UserRole | null): boolean {
+    return role === 'Administrator' || role === 'Auditor';
+  },
+
+  /**
+   * Can cancel or reactivate sampling batches (soft state toggle) - Admin and Auditor
+   */
+  canCancelBatch(role?: UserRole | null): boolean {
+    return role === 'Administrator' || role === 'Auditor';
+  },
+
+  /**
+   * Can permanently delete sampling batches from database - Strictly Admin only
+   */
+  canDeleteBatch(role?: UserRole | null): boolean {
     return role === 'Administrator';
   },
 
   /**
-   * Can cancel or delete sampling batches (Delete Batch) - Admin only
+   * Can revoke/cancel audit evaluation of a case (revert to pending status) - Admin and Auditor
    */
-  canDeleteBatch(role?: UserRole | null): boolean {
+  canRevokeAudit(role?: UserRole | null): boolean {
+    return role === 'Administrator' || role === 'Auditor';
+  },
+
+  /**
+   * Can permanently purge/delete audit evaluation records - Strictly Admin only
+   */
+  canPurgeAudit(role?: UserRole | null): boolean {
     return role === 'Administrator';
   },
 

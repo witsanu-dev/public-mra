@@ -369,9 +369,9 @@ export async function DELETE(req: NextRequest) {
     const itemId = searchParams.get('itemId');
     const auditIdParam = searchParams.get('auditId');
 
-    // RBAC: Only Administrator can revoke/delete audits
+    // RBAC: Administrator and Auditor can revoke/cancel audits (revert case to pending)
     const session = await getServerSession();
-    if (!session || !RBAC.canRevokeAudit(session.role)) {
+    if (!session || (!RBAC.isAdmin(session.role) && !RBAC.isAuditor(session.role))) {
       void logAuditEvent({
         req,
         category: 'AUDIT',
@@ -380,9 +380,9 @@ export async function DELETE(req: NextRequest) {
         severity: 'warning',
         targetType: 'opd_visit',
         targetId: vn || auditIdParam || itemId,
-        summary: 'ถูกปฏิเสธ: ไม่มีสิทธิ์ลบ/ยกเลิกผลตรวจประเมิน OPD',
+        summary: 'ถูกปฏิเสธ: ไม่มีสิทธิ์ยกเลิกผลตรวจประเมิน OPD',
       });
-      return forbiddenResponse('เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่มีสิทธิ์ลบหรือยกเลิกผลการตรวจประเมิน');
+      return forbiddenResponse('เฉพาะผู้ดูแลระบบ (Administrator) และผู้ตรวจประเมิน (Auditor) เท่านั้นที่มีสิทธิ์ยกเลิกผลการตรวจประเมิน');
     }
 
     if (!vn && !itemId && !auditIdParam) {

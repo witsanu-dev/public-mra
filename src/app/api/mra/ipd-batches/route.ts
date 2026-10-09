@@ -101,9 +101,9 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing batchId' }, { status: 400 });
     }
 
-    // RBAC: Only Administrator can modify batches (cancel, reactivate, complete, update metadata)
+    // RBAC: Administrator and Auditor can modify batches (cancel, reactivate, complete, update metadata)
     const session = await getServerSession();
-    if (!session || !RBAC.isAdmin(session.role)) {
+    if (!session || (!RBAC.isAdmin(session.role) && !RBAC.isAuditor(session.role))) {
       void logAuditEvent({
         req,
         category: 'SAMPLING',
@@ -114,7 +114,7 @@ export async function PATCH(req: NextRequest) {
         targetId: batchId,
         summary: 'ถูกปฏิเสธ: ไม่มีสิทธิ์แก้ไขหรือเปลี่ยนสถานะชุดสุ่มเวชระเบียน IPD',
       });
-      return forbiddenResponse('เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่มีสิทธิ์แก้ไขหรือเปลี่ยนแปลงสถานะชุดสุ่มเวชระเบียน IPD');
+      return forbiddenResponse('เฉพาะผู้ดูแลระบบ (Administrator) และผู้ตรวจประเมิน (Auditor) เท่านั้นที่มีสิทธิ์แก้ไขหรือเปลี่ยนแปลงสถานะชุดสุ่มเวชระเบียน IPD');
     }
 
     if (action === 'cancel') {

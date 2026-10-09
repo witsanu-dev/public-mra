@@ -127,7 +127,7 @@ export default function IpdAssessmentPage() {
 
   const handleRevokeThisAudit = async () => {
     if (!RBAC.canRevokeAudit(user?.role)) {
-      alertWarning('ไม่มีสิทธิ์ดำเนินการ', 'เฉพาะผู้ดูแลระบบ (Administrator) เท่านั้นที่สามารถยกเลิกผลการตรวจประเมินได้');
+      alertWarning('ไม่มีสิทธิ์ดำเนินการ', 'เฉพาะผู้ดูแลระบบหรือผู้ตรวจประเมินเท่านั้นที่สามารถยกเลิกผลการตรวจประเมินได้');
       return;
     }
 
