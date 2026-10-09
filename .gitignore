@@ -34,9 +34,8 @@ yarn-error.log*
 .env*
 !.env.example
 
-# database backups (preserve only clean schema template)
+# database backups (preserve schema and public demo templates)
 database/*backup*
-database/*demo*
 database/pre_truncate*
 
 # vercel
